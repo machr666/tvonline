@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<title>TVOnline v0.0.1</title>
+<link rel="icon" type="image/ico" href="{{ static_url('images/favicon.ico') }}"/>
+<link rel="stylesheet" href="{{ static_url('css/style.css') }}"/>
+<script type="text/javascript" src="{{ static_url('js/jquery-1.4.2.min.js') }}"></script>
+<script type="text/javascript" src="{{ static_url('js/jquery.history.min.js') }}"></script>
+<script type="text/javascript" src="{{ static_url('js/nav.js') }}"></script>
+</head>
+<body>
+    <div id="frame">
+        <div id="header">
+            <div id="title"><h2>TVOnline</h2></div>
+            <div id="logo"></div>
+        </div>
+        <ul id="nav">
+            <script>
+                $("#nav").append($(
+                '<li><a href="#home.html">Home</a></li>'+
+                '<li><a href="#watch.html">Watch</a></li>'+
+                '<li><a href="#config.html">Config</a></li>'+
+                '<li><a href="#about.html">About</a></li>'
+                ));
+            </script>
+            <noscript>
+                <li><a href="home.html">Home</a></li>
+                <li><a href="watch.html">Watch</a></li>
+                <li><a href="config.html">Config</a></li>
+                <li><a href="about.html">About</a></li>
+            </noscript>
+        </ul>
+        <div id="content">
+        {% block content %}
+           Sorry, the page you requested was not found.
+        {% end %} 
+        </div>
+        <div id="foot">
+            <div id="load"></div>
+            <div id="info">Copyright &copy;2013 - MACHr666 (machr666@gmail.com)</div>
+        </div>
+    </div>
+</body>
+</html>
