@@ -25,7 +25,7 @@ class ReqHandler(tornado.web.RequestHandler):
     ''' Handle get requests '''
     def get(self, page="home.html"):
         print("Loading " + page)
-        self.render(page)
+        self.render("../"+page)
 
 # Launch server
 if __name__ == "__main__":
