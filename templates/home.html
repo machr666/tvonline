@@ -2,4 +2,19 @@
 
 {% block content %}
 <h2>Welcome to TVOnline!</h2>
+<p>On this website you can watch live TV streamed from a desktop computer.
+This is ideal if you want to share your local satellite signal with a
+group of friends, who live abroad or in order to get access to your TV
+when you are abroad.</p>
+
+<p>The site offers username/password authentication and further allows
+selected users to configure the quality of the stream. At the moment we
+assume that there is only one TV card available, so program changes will
+affect all the users that are watching TV on the website. This is, however,
+deliberate as we do expect more than 1-2 people using this website to watch
+TV on demand.</p>
+
+<p>As for the setup we recommend to run this website on a Raspberry Pi which
+will use Wake-On-LAN (WOL) to wake up a desktop computer whenever video
+transcoding is required.</p>
 {% end %}

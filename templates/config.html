@@ -1,5 +1,17 @@
 {% extends "main.html" %}
 
 {% block content %}
-Let's config the TV. Please be aware that the config affects all other viewers.
+<p>On this page you can configure the transcoding parameters. Please be aware that
+the config affects all other viewers as this service is based on a single TV tuner-card.</p>
+<br>
+<form>
+<p id="AudioRate">
+    Audio Codec Rate: kbit/s
+    <br><input type="text" name="AudioRateValue" value="56">
+</p>
+<p id="VideoRate">
+    Video Codec Rate: kbit/s
+    <br><input type="text" name="VideoRateValue" value="576">
+</p>
+<form>
 {% end %}
