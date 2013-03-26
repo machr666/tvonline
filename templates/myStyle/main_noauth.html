@@ -5,9 +5,6 @@
 <title>TVOnline v0.0.1</title>
 <link rel="icon" type="image/ico" href="{{ static_url('images/favicon.ico') }}"/>
 <link rel="stylesheet" href="{{ static_url('css/style.css') }}"/>
-<script type="text/javascript" src="{{ static_url('js/jquery-1.4.2.min.js') }}"></script>
-<script type="text/javascript" src="{{ static_url('js/jquery.history.min.js') }}"></script>
-<script type="text/javascript" src="{{ static_url('js/nav.js') }}"></script>
 </head>
 <body>
     <div id="frame">
@@ -16,21 +13,7 @@
             <div id="logo"></div>
         </div>
         <ul id="nav">
-            <script>
-                $("#nav").prepend($(
-                '<li><a href="#home">Home</a></li>'+
-                '<li><a href="#tv">TV</a></li>'+
-                '<li><a href="#config">Config</a></li>'+
-                '<li><a href="#about">About</a></li>'
-                ));
-            </script>
-            <noscript>
-                <li><a href="home">Home</a></li>
-                <li><a href="tv">TV</a></li>
-                <li><a href="config">Config</a></li>
-                <li><a href="about">About</a></li>
-            </noscript>
-            <li id="logout"><a href="logout">Logout</a></li>
+                <li><a href="login">Login</a></li>
         </ul>
         <div id="content">
         {% block content %}

@@ -6,7 +6,7 @@ aware that the config affects all other viewers as this service is based
 on a single TV tuner-card.</p>
 <br>
 <form>
-<table align="center">
+<table align="center" action="config">
     <tr><td><p>Audio Codec</p></td><td><p>Audio Rate</p></td></tr>
     <tr>
         <td><input type="select" name="AudioCodecValue"></td>
@@ -28,6 +28,9 @@ on a single TV tuner-card.</p>
         <td><input type="select" name="RegenKeyValue"></td>
     </tr>
 </table>
-
+<br>
+<center>
+    <input type="submit" value="Save configuration">
+</center>
 <form>
 {% end %}

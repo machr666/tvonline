@@ -58,6 +58,9 @@ body {
 #nav li a:hover {
   background: #1b1b1b url(images/nav_bar_o.jpg) repeat-x;
 }
+#nav li#logout {
+  float: right;
+}
 #content a {
     color: #E3E332;
 }
