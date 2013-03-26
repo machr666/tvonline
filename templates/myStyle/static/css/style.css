@@ -2,105 +2,103 @@
 /* CSS Document */
 
 body {
-	font: 0.8em "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
-	background: #222222;
-	margin: 0;
-	padding: 0;
+ font: 0.8em "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
+ background: #222222;
+ margin: 0;
+ padding: 0;
 }
 #frame {
-	width: 50%;
-	margin: 1% auto;
-	background: #0d0d0d;
-	color: #aaaaaa;
-	padding: 50px 25px 25px 25px;
-	border: 12px solid #2e2e2e;
-	position: relative;
+  width: 50%;
+  margin: 1% auto;
+  background: #0d0d0d;
+  color: #aaaaaa;
+  padding: 50px 25px 25px 25px;
+  border: 12px solid #2e2e2e;
+  position: relative;
 }
 #header {
-    display: block;
-    width: 100%;
-    height: 50px;
+  display: block;
+  width: 100%;
+  height: 50px;
 }
 #title {
-    float: left;
-    padding-top: 10px;
-    padding-left: 120px;
+  float: left;
+  padding-top: 10px;
+  padding-left: 120px;
 }
 #logo {
-    position: absolute;
-    background: url(images/tv.svg) no-repeat;
-    background-position: center top;
-    background-size: 90%;
-    top: 25px;
-    height: 128px;
-    width: 128px;
+  position: absolute;
+  background: url(images/tv.svg) no-repeat;
+  background-position: center top;
+  background-size: 90%;
+  top: 25px;
+  height: 128px;
+  width: 128px;
 }
-#nav {
-	list-style: none;
-	padding: 0;
-	background: #2e2e2e url(images/nav_bar.jpg) repeat-x;
-	display: block;
-	overflow: hidden;
-	font-size: 0.9em;
-	height:33px;
-	text-transform:capitalize;
+#nav { 
+  list-style: none;
+  padding: 0;
+  background: #2e2e2e url(images/nav_bar.jpg) repeat-x;
+  display: block;
+  overflow: hidden;
+  font-size: 0.9em;
+  height:33px;
+  text-transform:capitalize;
 }
 #nav li {
-    margin-left: 120px;
+  margin-left: 120px;
 }
 #nav li a {
-	display: block;
-	float: left;
-	padding: 10px 20px;
-	color: white;
-	text-decoration: none;
+  display: block;
+  float: left;
+  padding: 10px 20px;
+  color: white;
+  text-decoration: none;
 }
 #nav li a:hover {
-	background: #1b1b1b url(images/nav_bar_o.jpg) repeat-x;
+  background: #1b1b1b url(images/nav_bar_o.jpg) repeat-x;
 }
 #content a {
     color: #E3E332;
 }
 h2 {
-	margin: 0;
-	padding: 0.5em 0;
-	color:#E3E332;
-	font-family:Helvetica, Arial, Sans-serif;
+  margin: 0;
+  padding: 0.5em 0;
+  color:#E3E332;
+  font-family:Helvetica, Arial, Sans-serif;
 }
 p {
-	margin: 0;
-	padding: 0.4em 0;
-	line-height:1.4em;
-    text-align: justify;
+  margin: 0;
+  padding: 0.4em 0;
+  line-height:1.4em;
+  text-align: justify;
 }
 p:first-letter {
-    font-size: 1.5em;
-    color:#E3E332;
-    font-family:Helvetica, Arial, Sans-serif;
+  font-size: 1.5em;
+  color:#E3E332;
+  font-family:Helvetica, Arial, Sans-serif;
 }
-#content img.right {
-	float: right;
-	margin: 0 0 8px 8px;
+table {
 
 }
 #foot {
-	padding: 15px;
-	color: white;
-	text-align: right;
-	margin: 25px 0 0 0;
-	border-top:1px solid #2e2e2e;
+  padding: 15px;
+  color: white;
+  text-align: right;
+  margin: 25px 0 0 0;
+  border-top:1px solid #2e2e2e;
 }
 #load {
-    display: none;
-    float: left;
-	right: 10px;
-	background: url(images/ajax_loader.gif);
-    background-repeat: no-repeat;
-    background-size: 50%;
-    background-position: top left;
-    height: 32px;
-    width: 32px;
-    margin-top: -4px;
+  display: none;
+  float: left;
+  right: 10px;
+  background: url(images/ajax_loader.gif);
+  background-repeat: no-repeat;
+  background-size: 50%;
+  background-position: top left;
+  height: 32px;
+  width: 32px;
+  margin-top: -4px;
 }
 #info {
     float: right;

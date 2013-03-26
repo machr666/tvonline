@@ -1,17 +1,33 @@
 {% extends "main.html" %}
 
 {% block content %}
-<p>On this page you can configure the transcoding parameters. Please be aware that
-the config affects all other viewers as this service is based on a single TV tuner-card.</p>
+<p>On this page you can configure the transcoding parameters. Please be
+aware that the config affects all other viewers as this service is based
+on a single TV tuner-card.</p>
 <br>
 <form>
-<p id="AudioRate">
-    Audio Codec Rate: kbit/s
-    <br><input type="text" name="AudioRateValue" value="56">
-</p>
-<p id="VideoRate">
-    Video Codec Rate: kbit/s
-    <br><input type="text" name="VideoRateValue" value="576">
-</p>
+<table align="center">
+    <tr><td><p>Audio Codec</p></td><td><p>Audio Rate</p></td></tr>
+    <tr>
+        <td><input type="select" name="AudioCodecValue"></td>
+        <td><input type="select" name="AudioRateValue"</td>
+    </tr>
+    <tr><td><p>Video Codec</p></td><td><p>Video Rate</p></td></tr>
+    <tr>
+        <td><input type="select" name="VideoCodecValue"></td> 
+        <td><input type="select" name="VideoRateValue"</td>
+    </tr>
+    <tr><td><p>Video Dimensions</p></td><td><p>Crop Video?</p></td></tr>
+    <tr>
+        <td><input type="select" name="VideoDimValue"></td>
+        <td><input type="select" name="VideoCropValue"></td>
+    </tr>
+    <tr><td><p>Video Encryption?</p></td><td><p>Regenerate Key?</p></td></tr>
+    <tr>
+        <td><input type="select" name="VideoEncValue"></td>
+        <td><input type="select" name="RegenKeyValue"></td>
+    </tr>
+</table>
+
 <form>
 {% end %}
