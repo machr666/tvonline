@@ -5,27 +5,80 @@
 aware that the config affects all other viewers as this service is based
 on a single TV tuner-card.</p>
 <br>
-<form>
-<table align="center" action="config">
+<form action="config" method="post">
+<table align="center">
     <tr><td><p>Audio Codec</p></td><td><p>Audio Rate</p></td></tr>
     <tr>
-        <td><input type="select" name="AudioCodecValue"></td>
-        <td><input type="select" name="AudioRateValue"</td>
+        <td><select name="AudioCodec">
+            {% for codec in cfg.audioCodecs %}
+                {% if codec is cfg.curAudioCodec %}
+                <option value="{{ codec }}" selected>{{ codec }}</option>
+                {% else %}
+                    <option value="{{ codec }}">{{ codec }}</option>
+                {% end %}
+            {% end %}
+        </select></td>
+        <td><select name="AudioRate">
+            {% for rate in cfg.audioRates %}
+                {% if rate is cfg.curAudioRate %}
+                    <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
+                {% else %}
+                    <option value="{{ rate }}">{{ rate }} kbit/s</option>
+                {% end %}
+            {%end %}
+        <select></td>
     </tr>
     <tr><td><p>Video Codec</p></td><td><p>Video Rate</p></td></tr>
     <tr>
-        <td><input type="select" name="VideoCodecValue"></td> 
-        <td><input type="select" name="VideoRateValue"</td>
+        <td><select name="VideoCodec">
+            {% for codec in cfg.videoCodecs %}
+                {% if codec is cfg.curVideoCodec %}
+                    <option value="{{ codec }}" selected>{{ codec }}</option>
+                {% else %}
+                    <option value="{{ codec }}">{{ codec }}</option>
+                {% end %}
+            {% end %}
+        </select></td>
+        <td><select name="VideoRate">
+            {% for rate in cfg.videoRates %}
+                {% if rate is cfg.curVideoRate %}
+                    <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
+                {% else %}
+                    <option value="{{ rate }}">{{ rate }} kbit/s</option>
+                {% end %}
+            {%end %}
+        <select></td>
     </tr>
-    <tr><td><p>Video Dimensions</p></td><td><p>Crop Video?</p></td></tr>
+    <tr><td><p>Video Size</p></td><td><p></p></td></tr>
     <tr>
-        <td><input type="select" name="VideoDimValue"></td>
-        <td><input type="select" name="VideoCropValue"></td>
+        <td><select name="VideoSize">
+            {% for size in cfg.videoSizes %}
+                {% if size is cfg.curVideoSize %}
+                    <option value="{{ size }}" selected>{{ size }}%</option>
+                {% else %}
+                    <option value="{{ size }}">{{ size }}%</option>
+                {% end %}
+            {%end %}
+        <select></td>
+        <td></td>
     </tr>
-    <tr><td><p>Video Encryption?</p></td><td><p>Regenerate Key?</p></td></tr>
+    <tr><td><p>Stream Encryption</p></td><td><p>ReGen Key</p></td></tr>
     <tr>
-        <td><input type="select" name="VideoEncValue"></td>
-        <td><input type="select" name="RegenKeyValue"></td>
+        <td><select name="StreamEncryption">
+            {% for enc in cfg.streamEncryptions %}
+                {% if enc is cfg.curStreamEncryption %}
+                    <option value="{{ enc }}" selected>{{ enc }}</option>
+                {% else %}
+                    <option value="{{ enc }}">{{ enc }}</option>
+                {% end %}
+            {%end %}
+        <select></td>
+        <td><select name="GenEncryptionKey">
+            {% for tf in cfg.genEncryptionKey %}
+                <option value="{{ tf }}">{{ tf }}</option>
+            {%end %}
+        <select></td>
+        <td></td>
     </tr>
 </table>
 <br>

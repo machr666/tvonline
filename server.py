@@ -5,6 +5,9 @@ import tornado.httpserver
 import tornado.options
 import tornado.ioloop
 
+from config.MockConfigDAO import MockConfigDAO
+cfgDAO = MockConfigDAO()
+
 from tornado.options import define, options
 define("port", default=8080, help="Server port", type=int)
 
@@ -15,6 +18,7 @@ class TVServer(tornado.web.Application):
             (r"/", ReqHandler),
             (r"/login", LoginHandler),
             (r"/logout", LogoutHandler),
+            (r"/config", ConfigHandler),
             (r"/(\w+)", ReqHandler),
         ]
         mainDir = os.path.dirname(__file__)
@@ -56,14 +60,29 @@ class LogoutHandler(PersonalisedRequestHandler):
         self.delete_session_cookie()
         self.redirect("/")
 
+class ConfigHandler(PersonalisedRequestHandler):
+    ''' Handle the configuration page for the streaming '''
+
+    @tornado.web.authenticated
+    def get(self):
+        self.render("../config.html", cfg = cfgDAO.loadConfig())
+
+    def post(self):
+        cfgDAO.persistConfig(self.get_argument("AudioCodec"),
+                          self.get_argument("AudioRate"),
+                          self.get_argument("VideoCodec"),
+                          self.get_argument("VideoRate"),
+                          self.get_argument("VideoSize"),
+                          self.get_argument("StreamEncryption"),
+                          self.get_argument("GenEncryptionKey"))
+        self.render("../config.html", cfg = cfgDAO.loadConfig())
+
 class ReqHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the TVOnline website '''
 
     @tornado.web.authenticated
     def get(self, page="home"):
-        html = page + ".html"
-        print("Loading " + html)
-        self.render("../" + html)
+        self.render("../" + page + ".html")
 
 # Launch server
 if __name__ == "__main__":
