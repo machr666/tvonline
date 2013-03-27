@@ -84,6 +84,9 @@ class ReqHandler(PersonalisedRequestHandler):
     def get(self, page="home"):
         self.render("../" + page + ".html")
 
+    def get_error_html (self, status_code, **kwargs):
+        self.render("../error.html")
+
 # Launch server
 if __name__ == "__main__":
     tornado.options.parse_command_line()
