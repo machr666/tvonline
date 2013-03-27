@@ -23,7 +23,7 @@ class TVServer(tornado.web.Application):
         ]
         mainDir = os.path.dirname(__file__)
         settings = dict(
-            xsrf_cookie = True,
+            xsrf_cookies = True,
             cookie_secret = "bls9+x7PT5GIbaBuKzsGOecL9SG7KUmEh6rNbMYTpfk=",
             login_url = "/login",
             template_path = os.path.join(mainDir, "templates/myStyle"),
