@@ -35,6 +35,9 @@ class TVServer(tornado.web.Application):
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
+#---------------------------------------------------------------
+#               Utility classes and functions
+#---------------------------------------------------------------
 class PersonalisedRequestHandler(tornado.web.RequestHandler):
     ''' This class specifies how we store the user identity '''
 
@@ -44,6 +47,22 @@ class PersonalisedRequestHandler(tornado.web.RequestHandler):
     def delete_session_cookie(self):
         self.clear_cookie("user");
 
+# Decorator that checks both whether user is authenticated and
+# if they are authorised
+def requireAuth(group=""):
+    def _decorator(f):
+        @tornado.web.authenticated
+        def wrappedF(self,*args):
+            if group == "" or userDAO.isMemberOfGroup(self.current_user,group):
+                f(self,*args)
+                return
+            self.render("../noauth.html")
+        return wrappedF
+    return _decorator
+
+#---------------------------------------------------------------
+#               Request Handlers
+#---------------------------------------------------------------
 class LoginHandler(PersonalisedRequestHandler):
     ''' Show the login page and handle authentication process '''
 
@@ -74,10 +93,11 @@ class LogoutHandler(PersonalisedRequestHandler):
 class ConfigHandler(PersonalisedRequestHandler):
     ''' Handle the configuration page for the streaming '''
 
-    @tornado.web.authenticated
+    @requireAuth("config")
     def get(self):
         self.render("../config.html", cfg = cfgDAO.loadConfig())
 
+    @requireAuth("config")
     def post(self):
         cfgDAO.persistConfig(self.get_argument("AudioCodec"),
                           self.get_argument("AudioRate"),
@@ -91,7 +111,7 @@ class ConfigHandler(PersonalisedRequestHandler):
 class ReqHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the TVOnline website '''
 
-    @tornado.web.authenticated
+    @requireAuth("")
     def get(self, page="home"):
         self.render("../" + page + ".html")
 
