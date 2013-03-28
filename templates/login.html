@@ -1,7 +1,12 @@
 {% extends "main_noauth.html" %}
 
 {% block content %}
-<p>Please login with your username and password</p>
+
+{% if failure %}
+    <p>Login failed. Please try again or contact machr666@gmail.com</p>
+{% else %}
+    <p>Please login with your username and password</p>
+{% end %}
 <br>
 <form action="login" method="post">
 <table align="center">

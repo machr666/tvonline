@@ -5,6 +5,10 @@ import tornado.httpserver
 import tornado.options
 import tornado.ioloop
 
+# User authentication and rights management
+from usermgmt.MockUserMgmtDAO import MockUserMgmtDAO
+userDAO = MockUserMgmtDAO()
+# Stream configuration
 from config.MockConfigDAO import MockConfigDAO
 cfgDAO = MockConfigDAO()
 
@@ -45,11 +49,18 @@ class LoginHandler(PersonalisedRequestHandler):
 
     def get(self):
         if not self.current_user:
-            self.render("../login.html")
+            self.render("../login.html", failure=False)
             return
         self.redirect("/")
 
     def post(self):
+        # Login failure
+        if (not userDAO.isLoginValid(self.get_argument("username"),
+                                     self.get_argument("password"))):
+            self.render("../login.html", failure=True)
+            return
+
+        # Login success
         self.set_secure_cookie("user", self.get_argument("username"))
         self.redirect("/")
 
