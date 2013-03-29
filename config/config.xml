@@ -1,0 +1,43 @@
+<config>
+  <audiocodecs cur="MP3">
+    <audiocodec>MP2</audiocodec>
+    <audiocodec>MP3</audiocodec>
+    <audiocodec>WAV</audiocodec>
+    <audiocodec>OGG</audiocodec>
+  </audiocodecs>
+  <audiorates cur="56">
+    <audiorate>56</audiorate>
+    <audiorate>96</audiorate>
+    <audiorate>128</audiorate>
+    <audiorate>196</audiorate>
+    <audiorate>256</audiorate>
+    <audiorate>312</audiorate>
+  </audiorates>
+  <videocodecs cur="MP4">
+    <videocodec>MPEG-I</videocodec>
+    <videocodec>MPEG-II</videocodec>
+    <videocodec>MP4</videocodec>
+    <videocodec>DivX</videocodec>
+    <videocodec>XVid</videocodec>
+  </videocodecs>
+  <videorates cur="512">
+    <videorate>512</videorate>
+    <videorate>640</videorate>
+    <videorate>768</videorate>
+    <videorate>896</videorate>
+    <videorate>1024</videorate>
+    <videorate>2048</videorate>
+  </videorates>
+  <videosizes cur="66">
+    <videosize>33</videosize>
+    <videosize>50</videosize>
+    <videosize>66</videosize>
+    <videosize>75</videosize>
+    <videosize>90</videosize>
+    <videosize>100</videosize>
+  </videosize>
+  <streamencryptions cur="None" key="">
+    <streamencryption>None</streamencryption>
+    <streamencryption>AES</streamencryption>
+  </streamencryptions>
+</config>

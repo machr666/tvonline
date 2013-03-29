@@ -119,7 +119,7 @@ class ReqHandler(PersonalisedRequestHandler):
         self.render("../error.html")
 
 #---------------------------------------------------------------
-#               Lauch the server
+#               Launch the server
 #---------------------------------------------------------------
 if __name__ == "__main__":
     tornado.options.parse_command_line()

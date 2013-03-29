@@ -4,7 +4,7 @@ from Config import Config
 from ConfigDAO import ConfigDAO
 
 class MockConfigDAO(ConfigDAO):
-    """ This is a mock implementation of the IConfigDAO interface """
+    """ This is a mock implementation of the ConfigDAO abstract class """
 
     def loadConfig(self):
         cfg = Config()
@@ -27,3 +27,4 @@ class MockConfigDAO(ConfigDAO):
     def saveConfig(self, cfg):
         print("New config")
         print(cfg)
+        return True
