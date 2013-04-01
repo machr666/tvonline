@@ -65,11 +65,3 @@ class Config(object):
     def curStreamEncryption(self): return self._curStreamEncryption
     @curStreamEncryption.setter
     def curStreamEncryption(self, value): self._curStreamEncryption = value
-    @property
-    def genEncryptionKey(self): return self._genEncryptionKey
-    @genEncryptionKey.setter
-    def genEncryptionKey(self, value): self._genEncryptionKey = value
-    @property
-    def curEncryptionKey(self): return self._curEncryptionKey
-    @curEncryptionKey.setter
-    def curEncryptionKey(self, value): self._curEncryptionKey = value

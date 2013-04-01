@@ -13,8 +13,7 @@
     <audiorate>256</audiorate>
     <audiorate>312</audiorate>
   </audiorates>
-  <videocodecs cur="MP4">
-    <videocodec>MPEG-I</videocodec>
+  <videocodecs cur="MPEG-II">
     <videocodec>MPEG-II</videocodec>
     <videocodec>MP4</videocodec>
     <videocodec>DivX</videocodec>
@@ -35,8 +34,8 @@
     <videosize>75</videosize>
     <videosize>90</videosize>
     <videosize>100</videosize>
-  </videosize>
-  <streamencryptions cur="None" key="">
+  </videosizes>
+  <streamencryptions cur="None" key="NewKey">
     <streamencryption>None</streamencryption>
     <streamencryption>AES</streamencryption>
   </streamencryptions>

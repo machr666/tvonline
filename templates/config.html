@@ -11,7 +11,7 @@ on a single TV tuner-card.</p>
     <tr>
         <td><select name="AudioCodec">
             {% for codec in cfg.audioCodecs %}
-                {% if codec is cfg.curAudioCodec %}
+                {% if codec == cfg.curAudioCodec %}
                 <option value="{{ codec }}" selected>{{ codec }}</option>
                 {% else %}
                     <option value="{{ codec }}">{{ codec }}</option>
@@ -20,7 +20,7 @@ on a single TV tuner-card.</p>
         </select></td>
         <td><select name="AudioRate">
             {% for rate in cfg.audioRates %}
-                {% if rate is cfg.curAudioRate %}
+                {% if rate == cfg.curAudioRate %}
                     <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
                 {% else %}
                     <option value="{{ rate }}">{{ rate }} kbit/s</option>
@@ -32,7 +32,7 @@ on a single TV tuner-card.</p>
     <tr>
         <td><select name="VideoCodec">
             {% for codec in cfg.videoCodecs %}
-                {% if codec is cfg.curVideoCodec %}
+                {% if codec == cfg.curVideoCodec %}
                     <option value="{{ codec }}" selected>{{ codec }}</option>
                 {% else %}
                     <option value="{{ codec }}">{{ codec }}</option>
@@ -41,7 +41,7 @@ on a single TV tuner-card.</p>
         </select></td>
         <td><select name="VideoRate">
             {% for rate in cfg.videoRates %}
-                {% if rate is cfg.curVideoRate %}
+                {% if rate == cfg.curVideoRate %}
                     <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
                 {% else %}
                     <option value="{{ rate }}">{{ rate }} kbit/s</option>
@@ -53,7 +53,7 @@ on a single TV tuner-card.</p>
     <tr>
         <td><select name="VideoSize">
             {% for size in cfg.videoSizes %}
-                {% if size is cfg.curVideoSize %}
+                {% if size == cfg.curVideoSize %}
                     <option value="{{ size }}" selected>{{ size }}%</option>
                 {% else %}
                     <option value="{{ size }}">{{ size }}%</option>
@@ -62,20 +62,15 @@ on a single TV tuner-card.</p>
         <select></td>
         <td></td>
     </tr>
-    <tr><td><p>Stream Encryption</p></td><td><p>ReGen Key</p></td></tr>
+    <tr><td><p>Stream Encryption</p></td><td><p></p></td></tr>
     <tr>
         <td><select name="StreamEncryption">
             {% for enc in cfg.streamEncryptions %}
-                {% if enc is cfg.curStreamEncryption %}
+                {% if enc == cfg.curStreamEncryption %}
                     <option value="{{ enc }}" selected>{{ enc }}</option>
                 {% else %}
                     <option value="{{ enc }}">{{ enc }}</option>
                 {% end %}
-            {%end %}
-        <select></td>
-        <td><select name="GenEncryptionKey">
-            {% for tf in cfg.genEncryptionKey %}
-                <option value="{{ tf }}">{{ tf }}</option>
             {%end %}
         <select></td>
         <td></td>
@@ -87,4 +82,5 @@ on a single TV tuner-card.</p>
     <input type="submit" value="Save configuration">
 </center>
 <form>
+<p>{{ status }}</p>   
 {% end %}
