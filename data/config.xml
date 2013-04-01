@@ -13,7 +13,7 @@
     <audiorate>256</audiorate>
     <audiorate>312</audiorate>
   </audiorates>
-  <videocodecs cur="MPEG-II">
+  <videocodecs cur="MP4">
     <videocodec>MPEG-II</videocodec>
     <videocodec>MP4</videocodec>
     <videocodec>DivX</videocodec>

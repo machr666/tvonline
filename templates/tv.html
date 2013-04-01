@@ -1,5 +1,41 @@
 {% extends "main.html" %}
 
 {% block content %}
-<p>Let's watch some TV!</p>
+<style text="text/css">
+#content {
+    height: 400px;
+}
+</style>
+<div id="tv" style="float: left">
+    <p>Let's watch some TV!</p>
+    <embed type="application/x-vlc-plugin" name="player" 
+            autoplay="yes" loop="no"
+            target="{{ target }}" 
+            width="480" height="360"/>
+</div>
+<form style="float: right; padding-right: 25px;"
+                    action="tv" method="post">
+    <p>Channels</p>
+    {% module xsrf_form_html() %}
+    <input type="submit" value="Change channel"><br><br>
+    <div style="overflow-y:scroll; overflow-x: hidden; height:320px;
+                margin-left: -2px">
+        <table>
+        {% for channel in channellist %}
+            <tr><td>
+                <div class="channellist">
+                    {% if channel.id == curChannelId %}
+                        <input type="radio" id="{{ channel.short }}"
+                        name="channels" value="{{ channel.id }}" checked>
+                    {% else %}
+                        <input type="radio" id="{{ channel.short }}"
+                        name="channels" value="{{ channel.id }}">
+                    {% end %}
+                    <label for="{{ channel.short }}"{{ channel.name }}</label>
+                </div>
+            </td></tr>
+        {% end %}
+    </table>
+    </div>
+</form>
 {% end %}

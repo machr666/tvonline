@@ -104,5 +104,35 @@ table {
   margin-top: -4px;
 }
 #info {
-    float: right;
+  float: right;
+}
+
+.channellist input[type="radio"] {
+  display: none;
+}
+
+.specialscrollbar {
+  scrollbar-face-color: #222222;
+  scrollbar-3dlight-color: #222222;
+  scrollbar-base-color: #222222;
+  scrollbar-track-color: #222222;
+  scrollbar-darkshadow-color: #000;
+  scrollbar-arrow-color: #000;
+  scrollbar-shadow-color: #fff;
+  scrollbar-highlight-color: #fff;
+}
+
+.channellist label {
+  display:inline-block;
+  background-color:#222222;
+  color: white;
+  padding: 4px 10px;
+  font-family: Arial;
+  font-size: 1em;
+  width: 200px
+}
+
+.channellist input[type="radio"]:checked + label
+{
+  background-color:#444444;
 }
