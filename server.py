@@ -8,9 +8,15 @@ import tornado.ioloop
 # User authentication and rights management
 from usermgmt.MockUserMgmtDAO import MockUserMgmtDAO
 userDAO = MockUserMgmtDAO()
+
 # Stream configuration
-from config.XMLConfigDAO import XMLConfigDAO
+from stream.config.XMLConfigDAO import XMLConfigDAO
 cfgDAO = XMLConfigDAO("data/")
+
+# Stream control
+from stream.StreamControl import StreamControl
+from stream.MockProgramDAO import MockProgramDAO
+streamCtrl = StreamControl(MockProgramDAO(),"Not implemented yet")
 
 from tornado.options import define, options
 define("port", default=8080, help="Server port", type=int)
@@ -22,6 +28,7 @@ class TVServer(tornado.web.Application):
             (r"/", ReqHandler),
             (r"/login", LoginHandler),
             (r"/logout", LogoutHandler),
+            (r"/tv", TVHandler),
             (r"/config", ConfigHandler),
             (r"/(\w+)", ReqHandler),
         ]
@@ -90,6 +97,17 @@ class LogoutHandler(PersonalisedRequestHandler):
         self.delete_session_cookie()
         self.redirect("/")
 
+class TVHandler(PersonalisedRequestHandler):
+    ''' Handle get/post requests for the tv video page '''
+
+    @requireAuth("")
+    def get(self):
+        self.render("../tv.html", stream=streamCtrl)
+
+    @requireAuth("chanChange")
+    def post(self):
+        self.render("../tv.html", stream=streamCtrl)
+
 class ConfigHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the stream configuration page '''
 
@@ -114,7 +132,7 @@ class ReqHandler(PersonalisedRequestHandler):
     def get(self, page="home"):
         self.render("../" + page + ".html")
 
-    def get_error_html (self, status_code, **kwargs):
+    def get_error_html(self, status_code, **kwargs):
         self.render("../error.html")
 
 #---------------------------------------------------------------
