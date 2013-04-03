@@ -2,9 +2,9 @@
 
 import subprocess
 
-from Server import Server
+from Server import StdServer
 
-class WOLServer(Server):
+class WOLServer(StdServer):
     """ This class represents a stream server that supports Wake-On-LAN """
 
     # WOLServer specific constructor arguments

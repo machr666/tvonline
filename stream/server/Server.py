@@ -2,12 +2,14 @@
 
 from util.util import *
 
+import abc
 import time
 import threading
 import subprocess
 
 class Server(object):
-    """ This class represents a generic stream server """
+    """ This abstract class represents a generic stream server """
+    __metaclass__ = abc.ABCMeta
 
     SERVER_CLASS = 'svrclass'
     SERVER_UPLINK = 'uplink'
@@ -131,9 +133,23 @@ class Server(object):
 
     # This process is server dependent and should be implemented by
     # child classes
+    @abc.abstractmethod
     def startServer(self):
         pass
 
     # This should be a feature of the server's TVOnline service
+    @abc.abstractmethod
+    def stopServer(self):
+        pass
+
+
+class StdServer(Server):
+    """ This class represents a generic stream server """
+
+    SERVER_ARGS = []
+
+    def startServer(self):
+        pass
+
     def stopServer(self):
         pass
