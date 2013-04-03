@@ -1,0 +1,70 @@
+{% extends "main.html" %}
+{% block content %}
+<style type="text/css">
+    table.fixed { table-layout:fixed; }
+    table.fixed td { overflow: hidden; }
+</style>
+<h2>Infrastructure overview and configuration:</h2>
+<table align="center">
+    <col width="100px" height="20px"/>
+    <col width="100px" height="20px"/>
+    <col width="200px" height="20px"/>
+    {% for uplink, servers in infrastructure.items() %}
+        <tr><td><p>Uplink: {{ uplink }}</p></td><td></td><td></td></tr>
+        {% for server in servers %}
+            <tr><td></td><td><p>Server: {{ server.name }}</p></td><td></td></tr>
+            <tr><td></td><td></td><td><p>Address: {{ server.address }}</p></td></tr>
+            <tr><td></td><td></td><td><p>MaxUpload: {{ server.uploadMax }} kbit/s</p></td></tr>
+            <tr><td></td><td></td><td><p>CurUpload: {{ server.curUpload }} kbit/s</p></td></tr>
+            <tr><td></td><td></td>
+                <td>
+                    <p>State:</p>
+                    <form action="server" method="post">
+                        {% set offBtnState = "" %}
+                        {% set bootBtnState = "disabled" %}
+                        {% set onBtnState = "" %}
+                        {% if server.state == server.STATE.DOWN %}
+                            {% set offBtnState = "checked" %}
+                        {% elif server.state == server.STATE.UP %}
+                            {% set onBtnState = "checked" %}
+                        {% else %}
+                            {% set bootBtnState = "checked" %}
+                            {% set offBtnState = "disabled" %}
+                            {% set onBtnState = "disabled" %}
+                        {% end %}
+                        <center>
+                            <div class="offState" width="75px">
+                                <input type="radio" name="{{ STATE }}"
+                                    id="{{ server.name }}down"
+                                    value="{{ server.STATE.DOWN }}" 
+                                    {{ offBtnState }}>
+                                <label for="{{ server.name }}down"
+                                        style="width: 60px;">Offline</label>
+                            </div>
+                            <div class="bootState" width="75px">
+                                <input type="radio" name="{{ STATE }}"
+                                    id="{{ server.name }}boot"
+                                    value="{{ server.STATE.BOOT }}" 
+                                    {{ bootBtnState }}>
+                                <label for="{{ server.name }}boot"
+                                        style="width: 60px;">Booting</label>
+                            </div>
+                            <div class="onState">
+                                <input type="radio" name="{{ STATE }}"
+                                    id="{{ server.name }}up"
+                                    value="{{ server.STATE.UP }}" 
+                                    {{ onBtnState }}>
+                                <label for="{{ server.name }}up"
+                                        style="width: 60px;">Online</label>
+                            </div>
+                            {% module xsrf_form_html() %}
+                            <input type="hidden" name="{{ SERVER }}"
+                                   value="{{ server.name }}">
+                            <input type="submit" value="Change">
+                        </center>
+                    </form>
+                </td></tr>
+        {% end %}
+    {% end %}
+</table>
+{% end %}

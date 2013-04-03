@@ -1,0 +1,8 @@
+<streams>
+  <stream>
+    <name>TV</name>
+    <class></class>
+    <active>True</active>
+    <server name="server1" port="4000">
+  </stream>
+</streams>

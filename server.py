@@ -13,10 +13,15 @@ userDAO = MockUserMgmtDAO()
 from stream.config.XMLConfigDAO import XMLConfigDAO
 cfgDAO = XMLConfigDAO("data/")
 
-# Stream control
-from stream.StreamControl import StreamControl
-from stream.MockProgramDAO import MockProgramDAO
-streamCtrl = StreamControl(MockProgramDAO(),"Not implemented yet")
+## Stream control
+#from stream.StreamControl import StreamControl
+#from stream.MockProgramDAO import MockProgramDAO
+#streamCtrl = StreamControl(MockProgramDAO(),"Not implemented yet")
+
+# Server configuration
+from stream.server.ServerManager import ServerManager
+from stream.server.XMLServerDAO import XMLServerDAO
+serverMgr = ServerManager(XMLServerDAO("data/"))
 
 from tornado.options import define, options
 define("port", default=8080, help="Server port", type=int)
@@ -30,6 +35,7 @@ class TVServer(tornado.web.Application):
             (r"/logout", LogoutHandler),
             (r"/tv", TVHandler),
             (r"/config", ConfigHandler),
+            (r"/server", ServerManagerHandler),
             (r"/(\w+)", ReqHandler),
         ]
         mainDir = os.path.dirname(__file__)
@@ -56,11 +62,13 @@ class PersonalisedRequestHandler(tornado.web.RequestHandler):
 
 # Decorator that checks both whether user is authenticated and
 # if they are authorised
-def requireAuth(group=""):
+def requireAuth(groups=[]):
     def _decorator(f):
         @tornado.web.authenticated
         def wrappedF(self,*args):
-            if group == "" or userDAO.isMemberOfGroup(self.current_user,group):
+            if (groups == [] or 
+               [userDAO.isMemberOfGroup(self.current_user,group)
+                       for group in groups].count(True) > 0):
                 f(self,*args)
                 return
             self.render("../noauth.html")
@@ -100,22 +108,22 @@ class LogoutHandler(PersonalisedRequestHandler):
 class TVHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the tv video page '''
 
-    @requireAuth("")
+    @requireAuth()
     def get(self):
         self.render("../tv.html", stream=streamCtrl)
 
-    @requireAuth("chanChange")
+    @requireAuth()
     def post(self):
         self.render("../tv.html", stream=streamCtrl)
 
 class ConfigHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the stream configuration page '''
 
-    @requireAuth("config")
+    @requireAuth(["config"])
     def get(self):
         self.render("../config.html", cfg=cfgDAO.loadConfig(), status="")
 
-    @requireAuth("config")
+    @requireAuth(["config"])
     def post(self):
         ret = cfgDAO.persistConfig(self.get_argument("AudioCodec"),
                           self.get_argument("AudioRate"),
@@ -125,10 +133,29 @@ class ConfigHandler(PersonalisedRequestHandler):
                           self.get_argument("StreamEncryption"))
         self.render("../config.html", cfg=cfgDAO.loadConfig(), status=ret[1])
 
+class ServerManagerHandler(PersonalisedRequestHandler):
+    ''' Handle get/post requests for the server configuration page '''
+
+    @requireAuth(["config"])
+    def get(self):
+        self.render("../server.html", 
+                    SERVER=serverMgr.SERVER,
+                    STATE=serverMgr.STATE,
+                    infrastructure=serverMgr.infrastructure)
+
+    @requireAuth(["config"])
+    def post(self):
+        serverMgr.changeServerState(self.get_argument(serverMgr.SERVER),
+                                    self.get_argument(serverMgr.STATE))
+        self.render("../server.html", 
+                    SERVER=serverMgr.SERVER,
+                    STATE=serverMgr.STATE,
+                    infrastructure=serverMgr.infrastructure)
+
 class ReqHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the TVOnline website '''
 
-    @requireAuth("")
+    @requireAuth()
     def get(self, page="home"):
         self.render("../" + page + ".html")
 

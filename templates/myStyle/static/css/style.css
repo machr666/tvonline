@@ -107,19 +107,59 @@ table {
   float: right;
 }
 
-.programlist input[type="radio"] {
+/* State toggle radio button style */
+.offState label {
+  display: inline-block;
+  background-color: #222222;
+  color: white;
+  padding: 4px 10px;
+}
+.offState input[type="radio"] {
   display: none;
 }
-.programlist label {
+.offState input[type="radio"]:checked + label{
+  color: black;
+  background-color: #bb0000;
+}
+
+.bootState label {
+  display: inline-block;
+  background-color: #222222;
+  color: white;
+  padding: 4px 10px;
+}
+.bootState input[type="radio"] {
+  display: none;
+}
+.bootState input[type="radio"]:checked + label{
+  color: black;
+  background-color: #00bbbb;
+}
+
+.onState label {
+  display: inline-block;
+  background-color: #222222;
+  color: white;
+  padding: 4px 10px;
+}
+.onState input[type="radio"] {
+  display: none;
+}
+.onState input[type="radio"]:checked + label{
+  color: black;
+  background-color: #00bb00;
+}
+/* Radio button style */
+.radiolist label {
   display:inline-block;
   background-color:#222222;
   color: white;
   padding: 4px 10px;
-  font-family: Arial;
-  font-size: 1em;
-  width: 200px
 }
-.programlist input[type="radio"]:checked + label
+.radiolist input[type="radio"] {
+  display: none;
+}
+.radiolist input[type="radio"]:checked + label
 {
   background-color:#444444;
 }
