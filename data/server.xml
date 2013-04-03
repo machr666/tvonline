@@ -1,8 +1,12 @@
 <servers>
   <server>
     <name>server1</name>
-    <svrclass>stream.server.LinuxServer.LinuxServer</svrclass>
+    <svrclass>stream.server.WOLServer.WOLServer</svrclass>
     <address>192.168.1.79</address>
+    <maxStreams>2</maxStreams>
     <uplink>uplink1</uplink>
+    <wolAddr>10.0.0.1</wolAddr>
+    <wolMACAddr>00:11:22:33</wolMACAddr>
+    <sslUser>machr666</sslUser>
   </server>
 </servers>

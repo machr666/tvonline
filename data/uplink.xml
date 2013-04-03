@@ -1,6 +1,6 @@
 <uplinks>
   <uplink>
     <name>uplink1</name>
-    <maxupload>1024</maxupload>
+    <maxUpload>1024</maxUpload>
   </uplink>
 </uplinks>

@@ -7,18 +7,26 @@ import threading
 import subprocess
 
 class Server(object):
-    """ This class represents a generic server """
+    """ This class represents a generic stream server """
+
+    SERVER_CLASS = 'svrclass'
+    SERVER_UPLINK = 'uplink'
+    SERVER_UPLINK_NAME = 'name'
+    # Generic constructor arguments
+    SERVER_ARGS = ['name','address','maxStreams','uplink']
+    UPLINK_ARGS = ['maxUpload']
 
     STATE = enum(UP='Online', DOWN='Offline', BOOT='Booting')
     MAX_PING_TRIAL = 3
     MAX_BOOT_TIME_SECS = 60
     SECS_BETWEEN_STATE_CHECKS = 5
 
-    def __init__(self,name,address,uplink,uploadMax):
+    def __init__(self,name,address,maxStreams,uplink,maxUpload):
         self._name = name
         self._address = address
+        self._maxStreams = int(maxStreams)
         self._uplink = uplink
-        self._uploadMax = uploadMax
+        self._maxUpload = int(maxUpload)
         self._curUpload = 0
         self._state = Server.STATE.DOWN
         self.updateStateChangeTStamp()
@@ -46,13 +54,17 @@ class Server(object):
                " CurUpload: " + str(self.curUpload))
 
     @property
+    def serverType(self): return self.__class__.__name__
+    @property
     def name(self): return self._name
     @property
     def address(self): return self._address
     @property
+    def maxStreams(self): return self._maxStreams
+    @property
     def uplink(self): return self._uplink
     @property
-    def uploadMax(self): return self._uploadMax
+    def maxUpload(self): return self._maxUpload
     @property
     def curUpload(self): return self._curUpload
     @curUpload.setter
@@ -117,18 +129,11 @@ class Server(object):
             print("Shutting down " + self.name)
             self.stopServer()
 
+    # This process is server dependent and should be implemented by
+    # child classes
     def startServer(self):
         pass
 
+    # This should be a feature of the server's TVOnline service
     def stopServer(self):
         pass
-
-    def stopStream(self,stream):
-        pass
-
-    def startStream(self,stream):
-        pass
-
-    def restartStream(self,stream):
-        self.stopStream(stream)
-        self.startStream(stream)

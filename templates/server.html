@@ -8,17 +8,28 @@
 <table align="center">
     <col width="100px" height="20px"/>
     <col width="100px" height="20px"/>
-    <col width="200px" height="20px"/>
+    <col width="150px" height="20px"/>
+    <col width="150px" height="20px"/>
     {% for uplink, servers in infrastructure.items() %}
         <tr><td><p>Uplink: {{ uplink }}</p></td><td></td><td></td></tr>
         {% for server in servers %}
             <tr><td></td><td><p>Server: {{ server.name }}</p></td><td></td></tr>
-            <tr><td></td><td></td><td><p>Address: {{ server.address }}</p></td></tr>
-            <tr><td></td><td></td><td><p>MaxUpload: {{ server.uploadMax }} kbit/s</p></td></tr>
-            <tr><td></td><td></td><td><p>CurUpload: {{ server.curUpload }} kbit/s</p></td></tr>
+            <tr><td></td><td></td>
+                <td><p>Type: {{ server.serverType }}</p></td>
+                <td><p>Address: {{ server.address }}</p></td>
+            </tr>
+            <tr><td></td><td></td>
+                <td><p>MaxNumStreams: {{ server.maxStreams }}</p></td>
+                <td><p>MaxUpload: {{ server.maxUpload }} kbit/s</p></td>
+            </tr>
+            <tr><td></td><td></td>
+                <td><p>CurUpload: {{ server.curUpload }} kbit/s</p></td>
+                <td><center><p>State:</p></center></td>
+            </tr>
             <tr><td></td><td></td>
                 <td>
-                    <p>State:</p>
+                </td>
+                <td>
                     <form action="server" method="post">
                         {% set offBtnState = "" %}
                         {% set bootBtnState = "disabled" %}

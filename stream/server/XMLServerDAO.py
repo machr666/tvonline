@@ -1,5 +1,6 @@
 #!/usr/bin/python
 
+from Server import Server
 import xml.etree.ElementTree as ET
 from ServerDAO import ServerDAO
 
@@ -12,11 +13,7 @@ class XMLServerDAO(ServerDAO):
 
     # Constants
     SERVER = "server"
-    SERVER_CLASS = "svrclass"
-    NAME = "name"
-    ADDRESS = "address"
     UPLINK = "uplink"
-    UPLOAD_MAX = "maxupload"
 
     def getServers(self):
         xmlSvrRoot = ET.parse(self.serverXML).getroot()
@@ -25,22 +22,27 @@ class XMLServerDAO(ServerDAO):
         servers = []
         for svr in xmlSvrRoot.iter(XMLServerDAO.SERVER):
             # Let's dynamically load the class definition
-            svrClassName = svr.find(XMLServerDAO.SERVER_CLASS).text
+            svrClassName = svr.find(Server.SERVER_CLASS).text
             svrClass = self.getServerClass(svrClassName)
 
             # Retrieve the server information
-            name = svr.find(XMLServerDAO.NAME).text
-            address = svr.find(XMLServerDAO.ADDRESS).text
-            uplink = svr.find(XMLServerDAO.UPLINK).text
+            args = []
+            for attr in Server.SERVER_ARGS:
+                args.append(svr.find(attr).text)
 
             # Retrieve the uplink information
-            uploadMax = 0
-            for upl in xmlUplRoot.iter(XMLServerDAO.UPLINK):
-                if (upl.find(XMLServerDAO.NAME).text == uplink):
-                    uploadMax = int(upl.find(XMLServerDAO.UPLOAD_MAX).text)
+            uplink = svr.find(Server.SERVER_UPLINK).text
+            for upl in xmlUplRoot.iter(Server.SERVER_UPLINK):
+                if (upl.find(Server.SERVER_UPLINK_NAME).text == uplink):
+                    for attr in Server.UPLINK_ARGS:
+                        args.append(upl.find(attr).text)
                     break
 
+            # Retrieve extra information related to the server class type
+            for attr in svrClass.SERVER_ARGS:
+                args.append(svr.find(attr).text)
+
             # Add the server to the list of servers
-            servers.append(svrClass(name,address,uplink,uploadMax))
+            servers.append(svrClass(*args))
 
         return servers
