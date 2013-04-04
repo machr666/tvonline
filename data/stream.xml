@@ -1,8 +1,27 @@
 <streams>
   <stream>
     <name>TV</name>
-    <class></class>
-    <active>True</active>
-    <server name="server1" port="4000">
+    <streamClass>stream.DVBSStream.DVBSStream</streamClass>
+    <servers>
+      <server>server1</server>
+    </servers>
+    <streamConfig>TV.xml</streamConfig>
+    <channels cur="ARD">
+      <channel name="ARD" id="ARD" cat="GER"/>
+      <channel name="ZDF" id="ZDF" cat="GER"/>
+      <channel name="WDR" id="WDR" cat="GER"/>
+      <channel name="RTL" id="RTL" cat="GER"/>
+      <channel name="SAT 1" id="SAT1" cat="GER"/>
+      <channel name="Kabel 1" id="KABEL1" cat="GER"/>
+      <channel name="Sport 1" id="SPORT1" cat="GER"/>
+      <channel name="Eurosport" id="EUROSPORT" cat="GER"/>
+      <channel name="BBC 1" id="BBC1" cat="UK"/>
+      <channel name="BBC 2" id="BBC2" cat="UK"/>
+      <channel name="ITV 1" id="ITV1" cat="UK"/>
+    </channels>
+    <categories>
+      <category name="German TV" id="GER"/>
+      <category name="British TV" id="UK"/>
+    </categories>
   </stream>
 </streams>
