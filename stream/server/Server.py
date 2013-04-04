@@ -148,8 +148,7 @@ class BaseServer(Server):
                 self.state = Server.STATE.DOWN
                 self.lock.release()
             # Server up and running?
-            if (subprocess.call(['ping', '-c 1', self.address],
-                                stdout=subprocess.PIPE) == 0):
+            if (self.__getCurUploadRate()):
                 self.lock.acquire()
                 self.state = Server.STATE.UP
                 self.pingTrials = 0
@@ -166,11 +165,31 @@ class BaseServer(Server):
             # Let's wait a while
             time.sleep(BaseServer.SECS_BETWEEN_STATE_CHECKS)
 
+    def __getCurUploadRate(self):
+        uploadRate = 0
+        try:
+            uploadRate = self.server.curUploadRate(self.tvOnlineSecret)
+        except:
+            uploadRate = -1
+        self.lock.acquire()
+        if (uploadRate == -1):
+            self.curUpload = 0
+        else:
+            self.curUpload = uploadRate/1024
+        self.lock.release()
+
+        return uploadRate >= 0
+
     def startServer(self):
         pass
 
     def __shutdown(self):
-        return self.server.shutdown(self.tvOnlineSecret)
+        retVal = False
+        try:
+            retVal = self.server.shutdown(self.tvOnlineSecret)
+        except:
+            print("Cannot shutdown server")
+        return retVal
 
     def stopServer(self):
         # Let spawn a process that executes the remote shutdown

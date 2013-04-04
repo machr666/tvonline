@@ -1,9 +1,10 @@
 <servers>
   <server>
     <name>server1</name>
-    <svrclass>stream.server.Server.StdServer</svrclass>
+    <svrclass>stream.server.Server.BaseServer</svrclass>
     <address>127.0.0.1</address>
-    <tvOnlinePort>2000</tvOnlinePort>
+    <tvOnlinePort>1443</tvOnlinePort>
+    <tvOnlineSecret>TVOnlineRules</tvOnlineSecret>
     <maxStreams>2</maxStreams>
     <uplink>uplink1</uplink>
   </server>
@@ -11,10 +12,11 @@
     <name>server2</name>
     <svrclass>stream.server.WOLServer.WOLServer</svrclass>
     <address>192.168.1.79</address>
-    <tvOnlinePort>2000</tvOnlinePort>
+    <tvOnlinePort>1443</tvOnlinePort>
+    <tvOnlineSecret>TVOnlineRules</tvOnlineSecret>
     <maxStreams>2</maxStreams>
     <uplink>uplink1</uplink>
     <wolAddr>10.0.0.1</wolAddr>
-    <wolMACAddr>00:11:22:33</wolMACAddr>
+    <wolMACAddr>xx:xx:xx:xx:xx:xx</wolMACAddr>
   </server>
 </servers>
