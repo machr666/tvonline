@@ -8,6 +8,8 @@ import threading
 class StreamManager(object):
     """ This class manages all streams """
 
+    STREAM = "stream"
+    STATE = "state"
     SECS_BETWEEN_STATUS_CHECKS = 10
 
     def __init__(self,streamDAO):
@@ -42,9 +44,9 @@ class StreamManager(object):
                 # Update each streams state
                 for stream in streams:
                     stream.lock.acquire()
-                    stream.state = Stream.STATE.DOWN
+                    stream.setStreamState(server,Stream.STATE.DOWN)
                     if (stream in activeStreams):
-                        stream.state = Stream.STATE.UP
+                        stream.setStreamState(server,Stream.STATE.UP)
                     stream.lock.release()
 
         time.sleep(StreamManager.SECS_BETWEEN_STATUS_CHECKS)

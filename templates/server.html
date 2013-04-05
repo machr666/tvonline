@@ -6,10 +6,10 @@
 </style>
 <h2>Infrastructure overview and configuration:</h2>
 <table align="center">
-    <col width="100px" height="20px"/>
-    <col width="100px" height="20px"/>
     <col width="150px" height="20px"/>
     <col width="150px" height="20px"/>
+    <col width="200px" height="20px"/>
+    <col width="200px" height="20px"/>
     {% for uplink, servers in infrastructure.items() %}
         <tr><td><p>Uplink: {{ uplink }}</p></td><td></td><td></td></tr>
         {% for server in servers %}
@@ -50,7 +50,7 @@
                                     value="{{ server.STATE.DOWN }}" 
                                     {{ offBtnState }}>
                                 <label for="{{ server.name }}down"
-                                        style="width: 60px;">Offline</label>
+                                        style="width: 75px;">Offline</label>
                             </div>
                             <div class="bootState" width="75px">
                                 <input type="radio" name="{{ STATE }}"
@@ -58,7 +58,7 @@
                                     value="{{ server.STATE.BOOT }}" 
                                     {{ bootBtnState }}>
                                 <label for="{{ server.name }}boot"
-                                        style="width: 60px;">Booting</label>
+                                        style="width: 75px;">Booting</label>
                             </div>
                             <div class="onState">
                                 <input type="radio" name="{{ STATE }}"
@@ -66,7 +66,7 @@
                                     value="{{ server.STATE.UP }}" 
                                     {{ onBtnState }}>
                                 <label for="{{ server.name }}up"
-                                        style="width: 60px;">Online</label>
+                                        style="width: 75px;">Online</label>
                             </div>
                             {% module xsrf_form_html() %}
                             <input type="hidden" name="{{ SERVER }}"

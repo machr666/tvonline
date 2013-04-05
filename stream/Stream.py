@@ -122,10 +122,17 @@ class Stream(object):
     def cfgFile(self): return self._cfgFile
     @property
     def state(self): return self._state
-    @state.setter
-    def state(self,value): self._state = value
     @property
     def lock(self): return self._lock
+
+    def setStreamState(self,server,state):
+        if (server in self.state):
+            self.state[server] = state
+
+    def getStreamState(self,server):
+        if (server in self.state):
+            return self.state[server]
+        return self.STATE.DOWN
 
     @abc.abstractmethod
     def applyStreamConfig(self):

@@ -1,22 +1,74 @@
 {% extends "main.html" %}
 
 {% block content %}
+<style type="text/css">
+    table.fixed { table-layout:fixed; }
+    table.fixed td { overflow: hidden; }
+</style>
+<h2>Stream overview, control and configuration</h2>
 <p>On this page you can configure and control all registered streams.
 Please be aware that any changes may affect other viewers as depending
 on the nature of the stream</p>
 <br>
 {% for stream in streams %}
     <form action="stream" method="post">
-    <input type="hidden" value="{{ stream.name }}"/>
+    <input type="hidden" name="{{ STREAM }}" value="{{ stream.name }}"/>
     <table align="center">
-        <tr><td><p>Stream: {{ stream.name }}</p></td>
-            <td><p>Type: {{ stream.type }}</p></td></tr>
-        <tr><td><p>Servers:</p></td><td></td></tr>
-        {% for server in stream.servers %}
-            <tr><td>{{ server.name }}</td><td>...</td></tr>
-        {% end %}
-        <tr><td><p>Audio Codec</p></td><td><p>Audio Rate</p></td></tr>
+        <col width="150px" height="40px"/>
+        <col width="200px" height="40px"/>
+        <col width="200px" height="40px"/>
+        <col width="200px" height="40px"/>
         <tr>
+            <td><p>{{ stream.name }} ({{ stream.type }})</p></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><p>Servers:</p></td>
+            <td></td>
+            <td><p>Stream state:</p></td>
+        </tr>
+        {% for server in stream.servers %}
+            {% set offBtnState = 'checked' %}
+            {% set onBtnState = '' %}
+            {% if stream.getStreamState(server) == stream.STATE.UP %}
+                {% set offBtnState = '' %}
+                {% set offBtnState = 'checked' %}
+            {% end %}
+            <tr>
+                <td></td>
+                <td></td>
+                <td><p>{{ server.name }}</p></td>
+                <td>
+                    <div class="offState" width=75px">
+                        <input type="radio" name="{{ server.name }}{{ STATE }}"
+                            id="{{ stream.name }}{{ server.name }}down"
+                            value="{{ stream.STATE.DOWN }}"
+                            {{ offBtnState }}>
+                        <label for="{{ stream.name }}{{ server.name }}down"
+                            style="width: 75px;">Off</label>
+                    </div>
+                    <div class="onState" width=75px">
+                        <input type="radio" name="{{ server.name }}{{ STATE }}"
+                            id="{{ stream.name }}{{ server.name }}up"
+                            value="{{ stream.STATE.UP }}"
+                            {{ onBtnState }}>
+                        <label for="{{ stream.name }}{{ server.name }}up"
+                            style="width: 75px;">On</label>
+                    </div>
+                </td>
+            </tr>
+        {% end %}
+        <tr>
+            <td></td>
+            <td><p>Audio Codec</p></td>
+            <td><p>Audio Rate</p></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
             <td><select name="AudioCodec">
                 {% for codec in stream.audioCodecs %}
                     {% if codec == stream.curAudioCodec %}
@@ -35,9 +87,16 @@ on the nature of the stream</p>
                     {% end %}
                 {% end %}
             <select></td>
+            <td></td>
         </tr>
-        <tr><td><p>Video Codec</p></td><td><p>Video Rate</p></td></tr>
         <tr>
+            <td></td>
+            <td><p>Video Codec</p></td>
+            <td><p>Video Rate</p></td>
+            <td><p>Video Size</p></td>
+        </tr>
+        <tr>
+            <td></td>
             <td><select name="VideoCodec">
                 {% for codec in stream.videoCodecs %}
                     {% if codec == stream.curVideoCodec %}
@@ -56,9 +115,6 @@ on the nature of the stream</p>
                     {% end %}
                 {% end %}
             <select></td>
-        </tr>
-        <tr><td><p>Video Size</p></td><td><p></p></td></tr>
-        <tr>
             <td><select name="VideoSize">
                 {% for size in stream.videoSizes %}
                     {% if size == stream.curVideoSize %}
@@ -70,8 +126,14 @@ on the nature of the stream</p>
             <select></td>
             <td></td>
         </tr>
-        <tr><td><p>Stream Encryption</p></td><td><p></p></td></tr>
         <tr>
+            <td></td>
+            <td><p>Stream Encryption</p></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
             <td><select name="StreamEncryption">
                 {% for enc in stream.streamEncryptions %}
                     {% if enc == stream.curStreamEncryption %}
@@ -82,13 +144,40 @@ on the nature of the stream</p>
                 {% end %}
             <select></td>
             <td></td>
+            <td></td>
+        </tr>
+        {% if stream.type == "DVBSStream" %}
+            <tr>
+                <td></td>
+                <td>
+                    <p>Channel</p>
+                    <select>
+                    {% for cat,channels in stream.catChannels.items() %}
+                        <optgroup label="{{ cat }}">
+                        {% for channel in channels %}
+                            {% set selected='' %}
+                            {% if stream.curChannel == channel %}
+                                {% set selected='selected' %}
+                            {% end %}
+                            <option value="{{ channel }}" {{ selected }}>
+                                {{ channel }}
+                            </option>
+                        {% end %}
+                        </optgroup>
+                    {% end %}
+                    </select>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+        {% end %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td>{% module xsrf_form_html() %}</td>
+            <td><input type="submit" value="Save configuration"></td>
         </tr>
     </table>
-    <br>
-    <center>
-        {% module xsrf_form_html() %}
-        <input type="submit" value="Save configuration">
-    </center>
     <form>
     {% end %}
 {% end %}
