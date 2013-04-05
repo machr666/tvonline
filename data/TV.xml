@@ -1,5 +1,6 @@
 <config>
   <audiocodecs cur="MP3">
+    <audiocodec>None</audiocodec>
     <audiocodec>MP2</audiocodec>
     <audiocodec>MP3</audiocodec>
     <audiocodec>WAV</audiocodec>
@@ -14,6 +15,7 @@
     <audiorate>312</audiorate>
   </audiorates>
   <videocodecs cur="MP4">
+    <videocodec>None</videocodec>
     <videocodec>MPEG-II</videocodec>
     <videocodec>MP4</videocodec>
     <videocodec>DivX</videocodec>
@@ -35,7 +37,7 @@
     <videosize>90</videosize>
     <videosize>100</videosize>
   </videosizes>
-  <streamencryptions cur="None" key="NewKey">
+  <streamencryptions cur="None">
     <streamencryption>None</streamencryption>
     <streamencryption>AES</streamencryption>
   </streamencryptions>

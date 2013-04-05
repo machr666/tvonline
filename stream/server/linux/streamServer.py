@@ -50,6 +50,8 @@ class SimpleXMLRPCServer(SSLServer, SimpleXMLRPCDispatcher):
 if __name__ == '__main__':
     print('Running XML-RPC server on port '+str(PORT))
     server = SimpleXMLRPCServer((ADDRESS, PORT))
+    print('This server supports the following operations:')
     for fct in SERVER_FCTS:
+        print(fct)
         server.register_function(globals()[fct])
     server.serve_forever()

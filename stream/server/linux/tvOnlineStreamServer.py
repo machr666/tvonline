@@ -3,11 +3,18 @@ import subprocess
 import threading
 import time
 SERVER_SECRET = "TVOnlineRules"
-SERVER_FCTS = ['shutdown','curUploadRate']
-
-def requireSecret(f):
+#SERVER_FCTS = ['shutdown','curUploadRate',
+#               'activeStreams','startStream',
+#               'stopStream']
+SERVER_FCTS = []
+def serviceFct(f):
+    # Register function 
+    global SERVER_FCTS
+    SERVER_FCTS.append(f.__name__)
     @wraps(f)
     def wrapper(*args, **kwds):
+        # Ensure that only servers who know this server's
+        # secret can execute functions on this stream server
         if (not str(args[0]) == SERVER_SECRET):
             print (str(args[0]) + ' is an invalid secret')
             return [False,"Server secret is wrong"]
@@ -15,7 +22,7 @@ def requireSecret(f):
     return wrapper
 
 # Shutdown the server
-@requireSecret
+@serviceFct
 def shutdown():
     print('Shutting down server')
     retVal = subprocess.call(['shutdown','-h','1'],
@@ -41,7 +48,31 @@ uploadRateThread = threading.Thread(target=calcUploadRate)
 uploadRateThread.daemon = True
 uploadRateThread.start()
 
-@requireSecret
+@serviceFct
 def curUploadRate():
     """ Return current upload rate in bits """
+    #print('UploadRate: '+str(curUpload)+ 'bit/s')
     return curUpload
+
+# Stream management
+streams = []
+def streamStatus(stream):
+    # TODO: Stub
+    return True
+
+# Check which streams are up
+@serviceFct
+def activeStreams():
+    return [streamStatus(stream) for stream in streams]
+
+# Start a new Stream
+@serviceFct
+def startStream(**kwargs):
+    # TODO: Stub
+    return True
+
+# Stop a Stream
+@serviceFct
+def stopStream(**kwargs):
+    # TODO: Stub
+    return True

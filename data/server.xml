@@ -1,7 +1,7 @@
 <servers>
   <server>
     <name>server1</name>
-    <svrclass>stream.server.Server.BaseServer</svrclass>
+    <svrclass>stream.server.BaseServer.BaseServer</svrclass>
     <address>127.0.0.1</address>
     <tvOnlinePort>1443</tvOnlinePort>
     <tvOnlineSecret>TVOnlineRules</tvOnlineSecret>

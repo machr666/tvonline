@@ -32,8 +32,5 @@ class DVBSStream(Stream):
     @property
     def categories(self): return self._categories
 
-    def streamConfigInfo(self):
-        pass
-
     def applyStreamConfig(self):
         pass

@@ -3,7 +3,6 @@
 from util.util import *
 
 import abc
-import time
 
 class Server(object):
     """ This abstract class represents a generic stream server """
@@ -41,9 +40,10 @@ class Server(object):
         return cmp(self.name, other.name)
 
     def __str__(self):
-        return str(self.name + " at " + self.address +
+        return str(self.name + " Type: " + self.serverType +
+               " Addr: " + self.address +
                " Uplink: " + self.uplink +
-               " UploadMax: " + str(self.uploadMax) +
+               " UploadMax: " + str(self.maxUpload) +
                " CurUpload: " + str(self.curUpload))
 
     @property
@@ -96,104 +96,30 @@ class Server(object):
             print("Shutting down " + self.name)
             self.stopServer()
 
-    # This process is server dependent and should be implemented by
-    # child classes
+    # Boot the remote server
     @abc.abstractmethod
     def startServer(self):
         pass
 
-    # This should be a feature of the server's TVOnline service
+    # Shutdown the remote server
     @abc.abstractmethod
     def stopServer(self):
         pass
 
-import xmlrpclib
-import subprocess
-import threading
-class BaseServer(Server):
-    """ This class represents a generic stream server """
-
-    SERVER_ARGS = []
-    MAX_PING_TRIAL = 3
-    MAX_BOOT_TIME_SECS = 60
-    SECS_BETWEEN_STATE_CHECKS = 5
-
-    def __init__(self,name,address,maxStreams,uplink,tvOnlinePort,
-                 tvOnlineSecret,maxUpload):
-        super(BaseServer,self).__init__(name,address,maxStreams,uplink,
-                                       tvOnlinePort,tvOnlineSecret,maxUpload)
-        self._server = xmlrpclib.Server('https://'+self.address+":"+
-                                        str(self.tvOnlinePort))
-
-        # Let's create background process that regularly checks if
-        # the server status
-        self._lock = threading.Lock()
-        self.__t = threading.Thread(target=self.__checkState)
-        self.__t.daemon = True
-        self.__t.start()
-
-    @property
-    def server(self): return self._server
-    @property
-    def lock(self): return self._lock
-
-    def __checkState(self):
-        """ Check current server state """
-        while(True):
-            # Has the maximum boot time been exceeded?
-            if (self.state == Server.STATE.BOOT and
-                getTStamp() - self.stateTStamp >= 
-                    BaseServer.MAX_BOOT_TIME_SECS):
-                self.lock.acquire()
-                self.state = Server.STATE.DOWN
-                self.lock.release()
-            # Server up and running?
-            if (self.__getCurUploadRate()):
-                self.lock.acquire()
-                self.state = Server.STATE.UP
-                self.pingTrials = 0
-                self.lock.release()
-            # Ping failure
-            else:
-                self.lock.acquire()
-                self.pingTrials += 1
-                if (not self.state == Server.STATE.BOOT and
-                    self.pingTrials == BaseServer.MAX_PING_TRIAL):
-                    self.state = Server.STATE.DOWN
-                self.lock.release()
-
-            # Let's wait a while
-            time.sleep(BaseServer.SECS_BETWEEN_STATE_CHECKS)
-
-    def __getCurUploadRate(self):
-        uploadRate = 0
-        try:
-            uploadRate = self.server.curUploadRate(self.tvOnlineSecret)
-        except:
-            uploadRate = -1
-        self.lock.acquire()
-        if (uploadRate == -1):
-            self.curUpload = 0
-        else:
-            self.curUpload = uploadRate/1024
-        self.lock.release()
-
-        return uploadRate >= 0
-
-    def startServer(self):
+    # Get the status of all streams running on the
+    # server. Returns a list with the name of  all
+    # streams that are currently running
+    @abc.abstractmethod
+    def getActiveStreams(self):
         pass
 
-    def __shutdown(self):
-        retVal = False
-        try:
-            retVal = self.server.shutdown(self.tvOnlineSecret)
-        except:
-            print("Cannot shutdown server")
-        return retVal
+    # Start a new stream
+    @abc.abstractmethod
+    def startStream(self,**kwargs):
+        pass
 
-    def stopServer(self):
-        # Let spawn a process that executes the remote shutdown
-        t = threading.Thread(target=self.__shutdown)
-        t.daemon = True
-        t.start()
+    # Stop a stream
+    @abc.abstractmethod
+    def stopStream(self,**kwargs):
+        pass
 

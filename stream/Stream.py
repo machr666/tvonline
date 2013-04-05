@@ -18,7 +18,7 @@ class Stream(object):
                      'videocodecs:cur','videocodecs/videocodec',
                      'videorates:cur','videorates/videorate',
                      'videosizes:cur','videosizes/videosize',
-                     'streamencryptions:cur,key',
+                     'streamencryptions:cur',
                      'streamencryptions/streamencryption']
 
     STATE = enum(UP='Running', DOWN='Down')
@@ -26,8 +26,23 @@ class Stream(object):
     def __init__(self,name,servers,cfg,cfgFile):
         self._name = name
         self._servers = servers
-        self._cfg = cfg
+
+        # The generic stream configuration
+        self._curAudioCodec = cfg[0][0]['cur']
+        self._audioCodecs = cfg[1]
+        self._curAudioRate = cfg[2][0]['cur']
+        self._audioRates = cfg[3]
+        self._curVideoCodec = cfg[4][0]['cur']
+        self._videoCodecs = cfg[5]
+        self._curVideoRate = cfg[6][0]['cur']
+        self._videoRates = cfg[7]
+        self._curVideoSize = cfg[8][0]['cur']
+        self._videoSizes = cfg[9]
+        self._curStreamEncryption = cfg[10][0]['cur']
+        self._streamEncryptions = cfg[11]
         self._cfgFile = cfgFile
+
+        # Other
         self._state = {server : Stream.STATE.DOWN for server in servers}
         self._lock = threading.Lock()
 
@@ -41,22 +56,68 @@ class Stream(object):
 
     def __str__(self):
         retStr = 'Stream: '+ self.name + ' Type: ' +\
-                  self.streamType + '\nServers:\n'
+                  self.type + '\nServers:\n'
         for svr in self.servers:
             retStr += '\t'+str(svr)+'\t Stream-State: '+self.state[svr]+'\n'
         retStr += 'Config: \n'
-        for cfg in self.cfg:
-            retStr += '\t'+str(cfg)+'\n'
+        retStr += 'AudioCodec: '+ self.curAudioCodec + '\n'
+        retStr += 'AudioRate: '+ self.curAudioRate + ' kbit/s\n'
+        retStr += 'VideoCodec: '+ self.curVideoCodec + '\n'
+        retStr += 'VideoRate: '+ self.curVideoRate + ' kbit/s\n'
+        retStr += 'VideoSize: '+ self.curVideoSize + '%\n'
+        retStr += 'StreamEncryption: '+ self.curStreamEncryption + '\n'
         return retStr
 
     @property
-    def streamType(self): return self.__class__.__name__
+    def type(self): return self.__class__.__name__
     @property
     def name(self): return self._name
     @property
     def servers(self): return self._servers
+
+    # Config
     @property
-    def cfg(self): return self._cfg
+    def curAudioCodec(self): return self._curAudioCodec
+    @curAudioCodec.setter
+    def curAudioCodec(self, value): self_curAudioCodec = value
+    @property
+    def audioCodecs(self): return self._audioCodecs
+
+    @property
+    def curAudioRate(self): return self._curAudioRate
+    @curAudioRate.setter
+    def curAudioRate(self, value): self_curAudioRate = value
+    @property
+    def audioRates(self): return self._audioRates
+
+    @property
+    def curVideoCodec(self): return self._curVideoCodec
+    @curVideoCodec.setter
+    def curVideoCodec(self, value): self_curVideoCodec = value
+    @property
+    def videoCodecs(self): return self._videoCodecs
+
+    @property
+    def curVideoRate(self): return self._curVideoRate
+    @curVideoRate.setter
+    def curVideoRate(self, value): self_curVideoRate = value
+    @property
+    def videoRates(self): return self._videoRates
+
+    @property
+    def curVideoSize(self): return self._curVideoSize
+    @curVideoSize.setter
+    def curVideoSize(self, value): self_curVideoSize = value
+    @property
+    def videoSizes(self): return self._videoSizes
+
+    @property
+    def curStreamEncryption(self): return self._curStreamEncryption
+    @curStreamEncryption.setter
+    def curStreamEncryption(self, value): self_curStreamEncryption = value
+    @property
+    def streamEncryptions(self): return self._streamEncryptions
+
     @property
     def cfgFile(self): return self._cfgFile
     @property
@@ -65,10 +126,6 @@ class Stream(object):
     def state(self,value): self._state = value
     @property
     def lock(self): return self._lock
-
-    @abc.abstractmethod
-    def streamConfigInfo(self):
-        pass
 
     @abc.abstractmethod
     def applyStreamConfig(self):

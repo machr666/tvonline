@@ -2,7 +2,7 @@
 
 import subprocess
 
-from Server import BaseServer
+from BaseServer import BaseServer
 
 class WOLServer(BaseServer):
     """ This class represents a stream server that supports Wake-On-LAN.

@@ -7,6 +7,9 @@ class StreamDAO(object):
     """ This is an abstract class for a stream factory """
     __metaclass__ = abc.ABCMeta
 
+    def __init__(self,svrMgr):
+        self._svrMgr = svrMgr
+
     @abc.abstractmethod
     def getStreams(self):
         pass
@@ -15,4 +18,4 @@ class StreamDAO(object):
         return getClass(name)
 
     def getServers(self,servers):
-        return servers
+        return [self._svrMgr.getServer(svr) for svr in servers]

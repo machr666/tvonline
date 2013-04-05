@@ -7,7 +7,8 @@ from StreamDAO import StreamDAO
 class XMLStreamDAO(StreamDAO):
     """ This is an stream factory that gets its data from XML files """
 
-    def __init__(self,folder):
+    def __init__(self,svrMgr,folder):
+        super(XMLStreamDAO,self).__init__(svrMgr)
         self.streamXML = folder+'/stream.xml'
         self.folder = folder+'/'
 

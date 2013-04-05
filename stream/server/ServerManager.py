@@ -8,7 +8,7 @@ class ServerManager(object):
 
     def __init__(self,serverDAO):
         """ Load all servers and create maps that
-            facilitate later request handling activities """
+            facilitate later request handling """
         self.__servers = {server.name : server for
                             server in serverDAO.getServers()}
         uplinkServerTpls = [(server.uplink, server) for
@@ -19,7 +19,7 @@ class ServerManager(object):
 
     @property
     def infrastructure(self):
-        """ Get uptodate information about all servers """
+        """ Get up-to-date information about all servers """
         return self.__serversByUplink
 
     def getServer(self,name):

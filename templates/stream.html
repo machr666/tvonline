@@ -1,0 +1,94 @@
+{% extends "main.html" %}
+
+{% block content %}
+<p>On this page you can configure and control all registered streams.
+Please be aware that any changes may affect other viewers as depending
+on the nature of the stream</p>
+<br>
+{% for stream in streams %}
+    <form action="stream" method="post">
+    <input type="hidden" value="{{ stream.name }}"/>
+    <table align="center">
+        <tr><td><p>Stream: {{ stream.name }}</p></td>
+            <td><p>Type: {{ stream.type }}</p></td></tr>
+        <tr><td><p>Servers:</p></td><td></td></tr>
+        {% for server in stream.servers %}
+            <tr><td>{{ server.name }}</td><td>...</td></tr>
+        {% end %}
+        <tr><td><p>Audio Codec</p></td><td><p>Audio Rate</p></td></tr>
+        <tr>
+            <td><select name="AudioCodec">
+                {% for codec in stream.audioCodecs %}
+                    {% if codec == stream.curAudioCodec %}
+                    <option value="{{ codec }}" selected>{{ codec }}</option>
+                    {% else %}
+                        <option value="{{ codec }}">{{ codec }}</option>
+                    {% end %}
+                {% end %}
+            </select></td>
+            <td><select name="AudioRate">
+                {% for rate in stream.audioRates %}
+                    {% if rate == stream.curAudioRate %}
+                        <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
+                    {% else %}
+                        <option value="{{ rate }}">{{ rate }} kbit/s</option>
+                    {% end %}
+                {% end %}
+            <select></td>
+        </tr>
+        <tr><td><p>Video Codec</p></td><td><p>Video Rate</p></td></tr>
+        <tr>
+            <td><select name="VideoCodec">
+                {% for codec in stream.videoCodecs %}
+                    {% if codec == stream.curVideoCodec %}
+                        <option value="{{ codec }}" selected>{{ codec }}</option>
+                    {% else %}
+                        <option value="{{ codec }}">{{ codec }}</option>
+                    {% end %}
+                {% end %}
+            </select></td>
+            <td><select name="VideoRate">
+                {% for rate in stream.videoRates %}
+                    {% if rate == stream.curVideoRate %}
+                        <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
+                    {% else %}
+                        <option value="{{ rate }}">{{ rate }} kbit/s</option>
+                    {% end %}
+                {% end %}
+            <select></td>
+        </tr>
+        <tr><td><p>Video Size</p></td><td><p></p></td></tr>
+        <tr>
+            <td><select name="VideoSize">
+                {% for size in stream.videoSizes %}
+                    {% if size == stream.curVideoSize %}
+                        <option value="{{ size }}" selected>{{ size }}%</option>
+                    {% else %}
+                        <option value="{{ size }}">{{ size }}%</option>
+                    {% end %}
+                {% end %}
+            <select></td>
+            <td></td>
+        </tr>
+        <tr><td><p>Stream Encryption</p></td><td><p></p></td></tr>
+        <tr>
+            <td><select name="StreamEncryption">
+                {% for enc in stream.streamEncryptions %}
+                    {% if enc == stream.curStreamEncryption %}
+                        <option value="{{ enc }}" selected>{{ enc }}</option>
+                    {% else %}
+                        <option value="{{ enc }}">{{ enc }}</option>
+                    {% end %}
+                {% end %}
+            <select></td>
+            <td></td>
+        </tr>
+    </table>
+    <br>
+    <center>
+        {% module xsrf_form_html() %}
+        <input type="submit" value="Save configuration">
+    </center>
+    <form>
+    {% end %}
+{% end %}

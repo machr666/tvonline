@@ -9,19 +9,15 @@ import tornado.ioloop
 from usermgmt.MockUserMgmtDAO import MockUserMgmtDAO
 userDAO = MockUserMgmtDAO()
 
-# Stream configuration
-from stream.config.XMLConfigDAO import XMLConfigDAO
-cfgDAO = XMLConfigDAO("data/")
-
-## Stream control
-#from stream.StreamControl import StreamControl
-#from stream.MockProgramDAO import MockProgramDAO
-#streamCtrl = StreamControl(MockProgramDAO(),"Not implemented yet")
-
 # Server configuration
-from stream.server.ServerManager import ServerManager
 from stream.server.XMLServerDAO import XMLServerDAO
-serverMgr = ServerManager(XMLServerDAO("data/"))
+from stream.server.ServerManager import ServerManager
+serverMgr = ServerManager(XMLServerDAO('data'))
+
+# Stream configuration
+from stream.XMLStreamDAO import XMLStreamDAO
+from stream.StreamManager import StreamManager
+streamMgr = StreamManager(XMLStreamDAO(serverMgr,'data'))
 
 from tornado.options import define, options
 define("port", default=8080, help="Server port", type=int)
@@ -34,7 +30,7 @@ class TVServer(tornado.web.Application):
             (r"/login", LoginHandler),
             (r"/logout", LogoutHandler),
             (r"/tv", TVHandler),
-            (r"/config", ConfigHandler),
+            (r"/stream", StreamHandler),
             (r"/server", ServerManagerHandler),
             (r"/(\w+)", ReqHandler),
         ]
@@ -116,34 +112,17 @@ class TVHandler(PersonalisedRequestHandler):
     def post(self):
         self.render("../tv.html", stream=streamCtrl)
 
-class ConfigHandler(PersonalisedRequestHandler):
-    ''' Handle get/post requests for the stream configuration page '''
-
-    @requireAuth(["config"])
-    def get(self):
-        self.render("../config.html", cfg=cfgDAO.loadConfig(), status="")
-
-    @requireAuth(["config"])
-    def post(self):
-        ret = cfgDAO.persistConfig(self.get_argument("AudioCodec"),
-                          self.get_argument("AudioRate"),
-                          self.get_argument("VideoCodec"),
-                          self.get_argument("VideoRate"),
-                          self.get_argument("VideoSize"),
-                          self.get_argument("StreamEncryption"))
-        self.render("../config.html", cfg=cfgDAO.loadConfig(), status=ret[1])
-
 class ServerManagerHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the server configuration page '''
 
-    @requireAuth(["config"])
+    @requireAuth(["admin"])
     def get(self):
         self.render("../server.html", 
                     SERVER=serverMgr.SERVER,
                     STATE=serverMgr.STATE,
                     infrastructure=serverMgr.infrastructure)
 
-    @requireAuth(["config"])
+    @requireAuth(["admin"])
     def post(self):
         serverMgr.changeServerState(self.get_argument(serverMgr.SERVER),
                                     self.get_argument(serverMgr.STATE))
@@ -151,6 +130,24 @@ class ServerManagerHandler(PersonalisedRequestHandler):
                     SERVER=serverMgr.SERVER,
                     STATE=serverMgr.STATE,
                     infrastructure=serverMgr.infrastructure)
+
+class StreamHandler(PersonalisedRequestHandler):
+    ''' Handle get/post requests for the stream configuration page '''
+
+    @requireAuth(["admin"])
+    def get(self):
+        self.render("../stream.html", streams=streamMgr.streams)
+
+    @requireAuth(["admin"])
+    def post(self):
+        '''ret = cfgDAO.persistConfig(self.get_argument("AudioCodec"),
+                          self.get_argument("AudioRate"),
+                          self.get_argument("VideoCodec"),
+                          self.get_argument("VideoRate"),
+                          self.get_argument("VideoSize"),
+                          self.get_argument("StreamEncryption"))
+        self.render("../config.html", cfg=cfgDAO.loadConfig(), status=ret[1])'''
+        self.render("../stream.html", streams=streamMgr.streams)
 
 class ReqHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the TVOnline website '''

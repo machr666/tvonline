@@ -8,7 +8,7 @@ class MockUserMgmtDAO(UserMgmtDAO):
     def __init__(self):
         self.userDB     = { 'machr666' : self.hashPwd('secret'),
                             'bob'      : self.hashPwd('bobssecret')}
-        self.groupDB    = { 'machr666' : ['user','config','admin'],
+        self.groupDB    = { 'machr666' : ['user','admin'],
                             'bob'      : ['user'] }
 
     def getUserPwd(self,username):
