@@ -49,52 +49,58 @@ class XMLStreamDAO(StreamDAO):
         return data
 
     def getStreams(self):
+        ''' Load the stream configuration from XML files '''
         xmlStreamRoot = ET.parse(self.streamXML).getroot()
 
         streams = []
         for stream in xmlStreamRoot.iter(XMLStreamDAO.STREAM):
 
-            # Load generic stream options
-            cfgFile = self.__getFromQuery(stream,Stream.STREAM_CFG)[0]
-            xmlCfgRoot = ET.parse(self.folder+cfgFile).getroot()
-            cfg = []
-            for c in Stream.STREAM_CONFIG:
-                cfg.append(self.__getFromQuery(xmlCfgRoot,c))
-
-            # Other generic stream information
+            # Generic stream information
             name = self.__getFromQuery(stream,Stream.STREAM_NAME)[0]
             servers = self.getServers(
                     self.__getFromQuery(stream,Stream.STREAM_SERVERS))
 
-            # Let's dynamically load the class definition
+            # Let's dynamically load the stream class definition
             streamClassName = self.__getFromQuery(stream,Stream.STREAM_CLASS)[0]
             streamClass = self.getStreamClass(streamClassName)
 
-            # Load class specific information
-            args = []
-            for arg in streamClass.STREAM_ARGS:
-                args.append(self.__getFromQuery(stream,arg))
+            # Load current stream config
+            cfgFile = self.__getFromQuery(stream,Stream.STREAM_CFG)[0]
+            xmlCfgRoot = ET.parse(self.folder+cfgFile).getroot()
+            cfgCur = dict()
+            for c in Stream.STREAM_CFG_CUR:
+                cfgCur[c] = [self.__getFromQuery(xmlCfgRoot,c)[0]['cur']]
+            for c in streamClass.STREAM_CFG_CUR:
+                cfgCur[c] = [self.__getFromQuery(xmlCfgRoot,c)[0]['cur']]
 
-            streams.append(streamClass(name,servers,cfg,cfgFile,*args))
-            '''
-            # Retrieve the server information
-            args = []
-            for attr in Server.SERVER_ARGS:
-                args.append(svr.find(attr).text)
+            # Get available config options
+            cfgOpts = []
+            for c in Stream.STREAM_CFG_OPTS:
+                cfgOpts.append(self.__getFromQuery(xmlCfgRoot,c))
+            clsCfgOpts = []
+            for c in streamClass.STREAM_CFG_OPTS:
+                clsCfgOpts.append(self.__getFromQuery(xmlCfgRoot,c))
 
-            # Retrieve the uplink information
-            uplink = svr.find(Server.SERVER_UPLINK).text
-            for upl in xmlUplRoot.iter(Server.SERVER_UPLINK):
-                if (upl.find(Server.SERVER_UPLINK_NAME).text == uplink):
-                    for attr in Server.UPLINK_ARGS:
-                        args.append(upl.find(attr).text)
-                    break
-
-            # Retrieve extra information related to the server class type
-            for attr in svrClass.SERVER_ARGS:
-                args.append(svr.find(attr).text)
-
-            # Add the server to the list of servers
-            servers.append(svrClass(*args))
-        '''
+            # Create the new stream
+            streams.append(streamClass(name,servers,cfgCur,cfgOpts,cfgFile,
+                           *clsCfgOpts))
         return streams
+
+    def __setFromQuery(self,root,query,value):
+        ''' Replace the current attribute pointed to
+            by the query with value query must have the
+            form path:attr'''
+        qsplit = query.split(':')
+        for path in root.findall(qsplit[0]):
+            path.set(qsplit[1],value)
+
+    def persist(self,stream):
+        ''' Save the configutation of the stream to XML '''
+        xmlCfgTree = ET.parse(self.folder+stream.cfgFile)
+        xmlCfgRoot = xmlCfgTree.getroot()
+
+        for k,v in stream.getCfg().items():
+            print(k,v)
+            self.__setFromQuery(xmlCfgRoot,k,v)
+
+        xmlCfgTree.write(self.folder+stream.cfgFile)

@@ -5,23 +5,24 @@ from Stream import Stream
 class DVBSStream(Stream):
     """ This class represents a DVB-S stream """
 
-    STREAM_ARGS = ['channels:cur','channels/channel:name,id,cat',
-                   'categories/category:name,id']
+    STREAM_CFG_CUR  = ['channels:cur']
+    STREAM_CFG_OPTS = ['channels/channel:name,id,cat',
+                       'categories/category:name,id']
 
-    CHANNEL = "channel"
-
-    def __init__(self,name,servers,cfg,cfgFile,
-                 curChannel,channels,categories):
-        self._curChannel = curChannel
+    def __init__(self,name,servers,cfgCur,cfgOpts,cfgFile,
+                 channels,categories):
+        self._channels = []
         self._catChannels = dict()
         for cat in categories:
             l = []
             for chan in channels:
                 if (chan['cat'] == cat['id']):
                         l.append(chan['name'])
+                        self._channels.append(chan['name'])
             self._catChannels[cat['name']] = l
 
-        super(DVBSStream,self).__init__(name,servers,cfg,cfgFile)
+        # Store current config in object
+        super(DVBSStream,self).__init__(name,servers,cfgCur,cfgOpts,cfgFile)
 
     def __str__(self):
         retVal = super(DVBSStream,self).__str__()
@@ -36,7 +37,16 @@ class DVBSStream(Stream):
     @curChannel.setter
     def curChannel(self,value): self._curChannel = value
     @property
+    def channels(self): return self._channels
+    @property
     def catChannels(self): return self._catChannels
 
-    def applyStreamConfig(self):
-        pass
+    def applyConfig(self,cfg):
+        super(DVBSStream,self).applyConfig(cfg)
+        if (cfg[DVBSStream.STREAM_CFG_CUR[0]][0] in self.channels):
+            self.curChannel = cfg[DVBSStream.STREAM_CFG_CUR[0]][0]
+
+    def getCfg(self):
+        cfg = super(DVBSStream,self).getCfg()
+        cfg[DVBSStream.STREAM_CFG_CUR[0]] = self.curChannel
+        return cfg

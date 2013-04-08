@@ -8,11 +8,15 @@
 <h2>Stream overview, control and configuration</h2>
 <p>On this page you can configure and control all registered streams.
 Please be aware that any changes may affect other viewers as depending
-on the nature of the stream</p>
+on the nature of the stream.</p>
 <br>
+{% from stream.Stream import Stream %}
+{% from stream.DVBSStream import DVBSStream %}
+{% from stream.StreamManager import StreamManager %}
 {% for stream in streams %}
     <form action="stream" method="post">
-    <input type="hidden" name="{{ STREAM }}" value="{{ stream.name }}"/>
+    <input type="hidden" name="{{ StreamManager.STREAM }}"
+           value="{{ stream.name }}"/>
     <table align="center">
         <col width="150px" height="40px"/>
         <col width="200px" height="40px"/>
@@ -43,7 +47,7 @@ on the nature of the stream</p>
                 <td><p>{{ server.name }}</p></td>
                 <td>
                     <div class="offState" width=75px">
-                        <input type="radio" name="{{ server.name }}{{ STATE }}"
+                        <input type="radio" name="{{ server.name }}:state"
                             id="{{ stream.name }}{{ server.name }}down"
                             value="{{ stream.STATE.DOWN }}"
                             {{ offBtnState }}>
@@ -51,7 +55,7 @@ on the nature of the stream</p>
                             style="width: 75px;">Off</label>
                     </div>
                     <div class="onState" width=75px">
-                        <input type="radio" name="{{ server.name }}{{ STATE }}"
+                        <input type="radio" name="{{ server.name }}:state"
                             id="{{ stream.name }}{{ server.name }}up"
                             value="{{ stream.STATE.UP }}"
                             {{ onBtnState }}>
@@ -69,7 +73,7 @@ on the nature of the stream</p>
         </tr>
         <tr>
             <td></td>
-            <td><select name="AudioCodec">
+            <td><select name="{{ Stream.STREAM_CFG_CUR[0] }}">
                 {% for codec in stream.audioCodecs %}
                     {% if codec == stream.curAudioCodec %}
                     <option value="{{ codec }}" selected>{{ codec }}</option>
@@ -78,7 +82,7 @@ on the nature of the stream</p>
                     {% end %}
                 {% end %}
             </select></td>
-            <td><select name="AudioRate">
+            <td><select name="{{ Stream.STREAM_CFG_CUR[1] }}">
                 {% for rate in stream.audioRates %}
                     {% if rate == stream.curAudioRate %}
                         <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
@@ -97,7 +101,7 @@ on the nature of the stream</p>
         </tr>
         <tr>
             <td></td>
-            <td><select name="VideoCodec">
+            <td><select name="{{ Stream.STREAM_CFG_CUR[2] }}">
                 {% for codec in stream.videoCodecs %}
                     {% if codec == stream.curVideoCodec %}
                         <option value="{{ codec }}" selected>{{ codec }}</option>
@@ -106,7 +110,7 @@ on the nature of the stream</p>
                     {% end %}
                 {% end %}
             </select></td>
-            <td><select name="VideoRate">
+            <td><select name="{{ Stream.STREAM_CFG_CUR[3] }}">
                 {% for rate in stream.videoRates %}
                     {% if rate == stream.curVideoRate %}
                         <option value="{{ rate }}" selected>{{ rate }} kbit/s</option>
@@ -115,7 +119,7 @@ on the nature of the stream</p>
                     {% end %}
                 {% end %}
             <select></td>
-            <td><select name="VideoSize">
+            <td><select name="{{ Stream.STREAM_CFG_CUR[4] }}">
                 {% for size in stream.videoSizes %}
                     {% if size == stream.curVideoSize %}
                         <option value="{{ size }}" selected>{{ size }}%</option>
@@ -134,7 +138,7 @@ on the nature of the stream</p>
         </tr>
         <tr>
             <td></td>
-            <td><select name="StreamEncryption">
+            <td><select name="{{ Stream.STREAM_CFG_CUR[5] }}">
                 {% for enc in stream.streamEncryptions %}
                     {% if enc == stream.curStreamEncryption %}
                         <option value="{{ enc }}" selected>{{ enc }}</option>
@@ -151,7 +155,7 @@ on the nature of the stream</p>
                 <td></td>
                 <td>
                     <p>Channel</p>
-                    <select>
+                    <select name="{{ DVBSStream.STREAM_CFG_CUR[0] }}">
                     {% for cat,channels in stream.catChannels.items() %}
                         <optgroup label="{{ cat }}">
                         {% for channel in channels %}

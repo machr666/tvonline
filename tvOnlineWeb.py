@@ -136,24 +136,14 @@ class StreamHandler(PersonalisedRequestHandler):
 
     @requireAuth(["admin"])
     def get(self):
-        self.render("../stream.html",
-                    STREAM=streamMgr.STREAM,
-                    STATE=streamMgr.STATE,
-                    streams=streamMgr.streams)
+        self.render("../stream.html", streams=streamMgr.streams)
 
     @requireAuth(["admin"])
     def post(self):
-        '''ret = cfgDAO.persistConfig(self.get_argument("AudioCodec"),
-                          self.get_argument("AudioRate"),
-                          self.get_argument("VideoCodec"),
-                          self.get_argument("VideoRate"),
-                          self.get_argument("VideoSize"),
-                          self.get_argument("StreamEncryption"))
-        self.render("../config.html", cfg=cfgDAO.loadConfig(), status=ret[1])'''
-        self.render("../stream.html",
-                    STREAM=streamMgr.STREAM,
-                    STATE=streamMgr.STATE,
-                    streams=streamMgr.streams)
+        print(self.request.arguments) 
+        streamMgr.configureStream(self.get_argument(streamMgr.STREAM),
+                                  self.request.arguments)
+        self.render("../stream.html", streams=streamMgr.streams)
 
 class ReqHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the TVOnline website '''

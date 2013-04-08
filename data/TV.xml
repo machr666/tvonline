@@ -1,44 +1,61 @@
 <config>
-  <audiocodecs cur="MP3">
-    <audiocodec>None</audiocodec>
-    <audiocodec>MP2</audiocodec>
-    <audiocodec>MP3</audiocodec>
-    <audiocodec>WAV</audiocodec>
-    <audiocodec>OGG</audiocodec>
-  </audiocodecs>
-  <audiorates cur="56">
-    <audiorate>56</audiorate>
-    <audiorate>96</audiorate>
-    <audiorate>128</audiorate>
-    <audiorate>196</audiorate>
-    <audiorate>256</audiorate>
-    <audiorate>312</audiorate>
-  </audiorates>
-  <videocodecs cur="MP4">
-    <videocodec>None</videocodec>
-    <videocodec>MPEG-II</videocodec>
-    <videocodec>MP4</videocodec>
-    <videocodec>DivX</videocodec>
-    <videocodec>XVid</videocodec>
-  </videocodecs>
-  <videorates cur="512">
-    <videorate>512</videorate>
-    <videorate>640</videorate>
-    <videorate>768</videorate>
-    <videorate>896</videorate>
-    <videorate>1024</videorate>
-    <videorate>2048</videorate>
-  </videorates>
-  <videosizes cur="66">
-    <videosize>33</videosize>
-    <videosize>50</videosize>
-    <videosize>66</videosize>
-    <videosize>75</videosize>
-    <videosize>90</videosize>
-    <videosize>100</videosize>
-  </videosizes>
-  <streamencryptions cur="None">
-    <streamencryption>None</streamencryption>
-    <streamencryption>AES</streamencryption>
-  </streamencryptions>
+  <audioCodecs cur="MP3">
+    <audioCodec>None</audioCodec>
+    <audioCodec>MP2</audioCodec>
+    <audioCodec>MP3</audioCodec>
+    <audioCodec>WAV</audioCodec>
+    <audioCodec>OGG</audioCodec>
+  </audioCodecs>
+  <audioRates cur="128">
+    <audioRate>56</audioRate>
+    <audioRate>96</audioRate>
+    <audioRate>128</audioRate>
+    <audioRate>196</audioRate>
+    <audioRate>256</audioRate>
+    <audioRate>312</audioRate>
+  </audioRates>
+  <videoCodecs cur="MPEG-II">
+    <videoCodec>None</videoCodec>
+    <videoCodec>MPEG-II</videoCodec>
+    <videoCodec>MP4</videoCodec>
+    <videoCodec>DivX</videoCodec>
+    <videoCodec>XVid</videoCodec>
+  </videoCodecs>
+  <videoRates cur="1024">
+    <videoRate>512</videoRate>
+    <videoRate>640</videoRate>
+    <videoRate>768</videoRate>
+    <videoRate>896</videoRate>
+    <videoRate>1024</videoRate>
+    <videoRate>2048</videoRate>
+  </videoRates>
+  <videoSizes cur="50">
+    <videoSize>33</videoSize>
+    <videoSize>50</videoSize>
+    <videoSize>66</videoSize>
+    <videoSize>75</videoSize>
+    <videoSize>90</videoSize>
+    <videoSize>100</videoSize>
+  </videoSizes>
+  <streamEncryptions cur="None">
+    <streamEncryption>None</streamEncryption>
+    <streamEncryption>AES</streamEncryption>
+  </streamEncryptions>
+  <channels cur="ARD">
+    <channel cat="GER" id="ARD" name="ARD" />
+    <channel cat="GER" id="ZDF" name="ZDF" />
+    <channel cat="GER" id="WDR" name="WDR" />
+    <channel cat="GER" id="RTL" name="RTL" />
+    <channel cat="GER" id="SAT1" name="SAT 1" />
+    <channel cat="GER" id="KABEL1" name="Kabel 1" />
+    <channel cat="GER" id="SPORT1" name="Sport 1" />
+    <channel cat="GER" id="EUROSPORT" name="Eurosport" />
+    <channel cat="UK" id="BBC1" name="BBC 1" />
+    <channel cat="UK" id="BBC2" name="BBC 2" />
+    <channel cat="UK" id="ITV1" name="ITV 1" />
+  </channels>
+  <categories>
+    <category id="GER" name="German TV" />
+    <category id="UK" name="British TV" />
+  </categories>
 </config>

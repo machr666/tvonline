@@ -13,34 +13,31 @@ class Stream(object):
     STREAM_CLASS = 'streamClass'
     STREAM_SERVERS = 'servers/server'
     STREAM_CFG = 'streamConfig'
-    STREAM_CONFIG = ['audiocodecs:cur','audiocodecs/audiocodec',
-                     'audiorates:cur','audiorates/audiorate',
-                     'videocodecs:cur','videocodecs/videocodec',
-                     'videorates:cur','videorates/videorate',
-                     'videosizes:cur','videosizes/videosize',
-                     'streamencryptions:cur',
-                     'streamencryptions/streamencryption']
+    STREAM_CFG_CUR = ['audioCodecs:cur', 'audioRates:cur',
+                      'videoCodecs:cur','videoRates:cur',
+                      'videoSizes:cur',
+                      'streamEncryptions:cur']
 
-    STATE = enum(UP='Running', DOWN='Down')
+    STREAM_CFG_OPTS = ['audioCodecs/audioCodec','audioRates/audioRate',
+                       'videoCodecs/videoCodec','videoRates/videoRate',
+                       'videoSizes/videoSize',
+                       'streamEncryptions/streamEncryption']
 
-    def __init__(self,name,servers,cfg,cfgFile):
+    STATE = enum(UP='Up', DOWN='Down')
+
+    def __init__(self,name,servers,cfgCur,cfgOpts,cfgFile):
         self._name = name
         self._servers = servers
-
-        # The generic stream configuration
-        self._curAudioCodec = cfg[0][0]['cur']
-        self._audioCodecs = cfg[1]
-        self._curAudioRate = cfg[2][0]['cur']
-        self._audioRates = cfg[3]
-        self._curVideoCodec = cfg[4][0]['cur']
-        self._videoCodecs = cfg[5]
-        self._curVideoRate = cfg[6][0]['cur']
-        self._videoRates = cfg[7]
-        self._curVideoSize = cfg[8][0]['cur']
-        self._videoSizes = cfg[9]
-        self._curStreamEncryption = cfg[10][0]['cur']
-        self._streamEncryptions = cfg[11]
+        self._audioCodecs = cfgOpts[0]
+        self._audioRates = cfgOpts[1]
+        self._videoCodecs = cfgOpts[2]
+        self._videoRates = cfgOpts[3]
+        self._videoSizes = cfgOpts[4]
+        self._streamEncryptions = cfgOpts[5]
         self._cfgFile = cfgFile
+
+        # Store current configuration
+        self.applyConfig(cfgCur)
 
         # Other
         self._state = {server : Stream.STATE.DOWN for server in servers}
@@ -135,5 +132,26 @@ class Stream(object):
         return self.STATE.DOWN
 
     @abc.abstractmethod
-    def applyStreamConfig(self):
-        pass
+    def applyConfig(self,cfg):
+        # The generic stream configuration
+        if (cfg[Stream.STREAM_CFG_CUR[0]][0] in self.audioCodecs):
+            self._curAudioCodec = cfg[Stream.STREAM_CFG_CUR[0]][0]
+        if (cfg[Stream.STREAM_CFG_CUR[1]][0] in self.audioRates):
+            self._curAudioRate = cfg[Stream.STREAM_CFG_CUR[1]][0]
+        if (cfg[Stream.STREAM_CFG_CUR[2]][0] in self.videoCodecs):
+            self._curVideoCodec = cfg[Stream.STREAM_CFG_CUR[2]][0]
+        if (cfg[Stream.STREAM_CFG_CUR[3]][0] in self.videoRates):
+            self._curVideoRate = cfg[Stream.STREAM_CFG_CUR[3]][0]
+        if (cfg[Stream.STREAM_CFG_CUR[4]][0] in self.videoSizes):
+            self._curVideoSize = cfg[Stream.STREAM_CFG_CUR[4]][0]
+        if (cfg[Stream.STREAM_CFG_CUR[5]][0] in self.streamEncryptions):
+            self._curStreamEncryption = cfg[Stream.STREAM_CFG_CUR[5]][0]
+
+    @abc.abstractmethod
+    def getCfg(self):
+        return { Stream.STREAM_CFG_CUR[0] : self.curAudioCodec,
+                 Stream.STREAM_CFG_CUR[1] : self.curAudioRate,
+                 Stream.STREAM_CFG_CUR[2] : self.curVideoCodec,
+                 Stream.STREAM_CFG_CUR[3] : self.curVideoRate,
+                 Stream.STREAM_CFG_CUR[4] : self.curVideoSize,
+                 Stream.STREAM_CFG_CUR[5] : self.curStreamEncryption }

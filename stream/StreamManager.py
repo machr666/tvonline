@@ -9,12 +9,12 @@ class StreamManager(object):
     """ This class manages all streams """
 
     STREAM = "stream"
-    STATE = "state"
     SECS_BETWEEN_STATUS_CHECKS = 10
 
     def __init__(self,streamDAO):
         """ Load all streams and create maps that
             facilitates later request handling """
+        self._streamDAO = streamDAO
         self._streams = {stream.name : stream for
                             stream in streamDAO.getStreams()}
         serverStreamTpls = [ (svr,stream) for stream in self.streams \
@@ -28,6 +28,8 @@ class StreamManager(object):
         self._t.daemon = True
         self._t.start()
 
+    @property
+    def streamDAO(self): return self._streamDAO
     @property
     def streams(self):
         """ Get up-to-date information about all streams """
@@ -56,13 +58,18 @@ class StreamManager(object):
         if name in self._streams:
             return self._streams[name]
         return None
-"""
-    def changeServerState(self,name,state):
-        "" Start/Stop servers ""
-        server = self.getServer(name)
-        if server == None:
+
+    def configureStream(self,name,cfg):
+        stream = self.getStream(name)
+        if (stream == None):
             return
-        server.changeState(state)
+
+        # Apply config
+        stream.applyConfig(cfg)
+
+        # Save config
+        self.streamDAO.persist(stream)
+"""
 
     def getServerUploadCapacity(self,name,update=False):
         "" Check the remaining upload capacity of a given server ""
