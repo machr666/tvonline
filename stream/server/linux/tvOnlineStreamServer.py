@@ -2,7 +2,14 @@ from functools import wraps
 import subprocess
 import threading
 import time
+import popen2
+from channels import channels
+from stream.Stream import Stream
+from stream.DVBSStream import DVBSStream
+
 SERVER_SECRET = "TVOnlineRules"
+STREAM_ADDRESS = "192.168.0.1"
+
 #SERVER_FCTS = ['shutdown','curUploadRate',
 #               'activeStreams','startStream',
 #               'stopStream']
@@ -55,26 +62,91 @@ def curUploadRate():
     return curUpload
 
 # Stream management
-streams = []
-def streamStatus(stream):
-    # TODO: Stub
+streams = {}
+def inactiveProg(prog):
+    print(prog.poll())
+    if (prog.poll() == -1):
+    	return False
     return True
 
 # Check which streams are up
 @serviceFct
 def activeStreams():
-    return [streamStatus(stream) for stream in streams]
+    # Remove inactive streams
+    global streams
+    print("Streams: " + str(streams))
+    inactive = []
+    for stream, (prog,address) in streams.items():
+	if (inactiveProg(prog)):
+	     inactive.append(stream)
+    for stream in inactive:
+	print(stream + str(streams[stream]) + "has stopped")
+        del streams[stream]
+
+    return {stream : address for stream, (prog,address) in streams.items()}
 
 # Start a new Stream
 @serviceFct
 def startStream(cfg):
-    # TODO: Stub
-    print cfg
+    print("Starting stream: " + str(cfg))
+    global streams
+    name = streamName(cfg)
+    if (name in streams):
+    	# Stop stream
+	kill(streams[name][0])
+
+    # Start stream
+    (name,prog,protocol,port) = streamVLC(cfg)
+    streams[name] = (prog,str(protocol)+"://"+str(STREAM_ADDRESS)+":"+str(port))
     return True
 
 # Stop a Stream
 @serviceFct
 def stopStream(cfg):
-    # TODO: Stub
-    print cfg
+    global streams
+    name = streamName(cfg)
+    if (name in streams):
+	return kill(streams[name][0])
+    return False
+
+def kill(prog):
+    while(prog.poll() == -1):
+	runSilent("kill -9 "+ str(prog.pid))
+	time.sleep(1)
     return True
+
+
+def runSilent(cmd):
+  print(cmd)
+  prog = popen2.Popen3(cmd + " > /dev/null 2>&1")
+  return prog
+
+def streamName(cfg):
+  return cfg[Stream.STREAM_NAME]
+
+def streamVLC(cfg):
+  name = cfg[Stream.STREAM_NAME]
+  streamClass = cfg[Stream.STREAM_CLASS]
+  audioCodec = cfg[Stream.STREAM_CFG_CUR[0]]
+  audioRate = cfg[Stream.STREAM_CFG_CUR[1]]
+  videoCodec = cfg[Stream.STREAM_CFG_CUR[2]]
+  videoRate = cfg[Stream.STREAM_CFG_CUR[3]]
+  videoSize = cfg[Stream.STREAM_CFG_CUR[4]]
+  streamEncryption = cfg[Stream.STREAM_CFG_CUR[5]]
+
+  vlcParams = ''
+  port = '0'
+  protocol = ''
+  if (cfg['streamClass'] == 'DVBSStream'):
+	print("Start DVB-s stream")
+  	channel = cfg[DVBSStream.STREAM_CFG_CUR[0]]
+	vlcParams += 'dvb-s://'+str(channels[channel])
+	port = 4000
+	protocol = 'http'
+
+  vlcParams += " --sout '#transcode{acodec="+str(audioCodec)+",ab="+str(audioRate)+",channels=2,samplerate=44100,hq"
+  vlcParams += ",vcodec="+str(videoCodec)+",vb="+str(videoRate)+",fps=25,scale=0."+str(videoSize)+"}" 
+  vlcParams += "std{access,"+str(protocol)+",mux,tex,dst=0.0.0.0:"+str(port)+"}' -v"
+
+  prog = runSilent("cvlc "+vlcParams)
+  return(name,prog,protocol,port)

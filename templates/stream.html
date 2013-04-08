@@ -30,8 +30,8 @@ on the nature of the stream.</p>
         </tr>
         <tr>
             <td></td>
-            <td><p>Servers:</p></td>
-            <td></td>
+            <td><p>Server:</p></td>
+            <td><p>Address:</td>
             <td><p>Stream state:</p></td>
         </tr>
         {% for server in stream.servers %}
@@ -43,8 +43,8 @@ on the nature of the stream.</p>
             {% end %}
             <tr>
                 <td></td>
-                <td></td>
                 <td><p>{{ server.name }}</p></td>
+                <td><p>{{ stream.getStreamAddress(server) }}</p></td>
                 <td>
                     <div class="offState" width=75px">
                         <input type="radio" name="{{ server.name }}"

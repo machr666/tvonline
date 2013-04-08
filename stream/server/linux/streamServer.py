@@ -1,10 +1,12 @@
 from SocketServer import TCPServer
-
 import ssl
 import fcntl
 from SimpleXMLRPCServer import SimpleXMLRPCServer, SimpleXMLRPCDispatcher
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
-
+import sys
+import os
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+"/../.."
+sys.path.insert(0,parentdir) 
 from tvOnlineStreamServer import *
 
 KEY_FILE = 'certs/tvonline.key'

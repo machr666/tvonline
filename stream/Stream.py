@@ -34,6 +34,7 @@ class Stream(object):
         self._videoRates = cfgOpts[3]
         self._videoSizes = cfgOpts[4]
         self._streamEncryptions = cfgOpts[5]
+        self._addresses = {}
         self._cfgFile = cfgFile
 
         # Other
@@ -113,6 +114,9 @@ class Stream(object):
     def streamEncryptions(self): return self._streamEncryptions
 
     @property
+    def addresses(self): return self._addresses
+
+    @property
     def cfgFile(self): return self._cfgFile
     @property
     def state(self): return self._state
@@ -121,11 +125,25 @@ class Stream(object):
 
     def setStreamState(self,server,state):
         self.state[server] = state
+        if (state == Stream.STATE.DOWN and
+            server in self.addresses):
+            del self.addresses[server]
 
     def getStreamState(self,server):
         if (not server in self.state):
             self.state[server] = Stream.STATE.DOWN
         return self.state[server]
+
+    def setStreamAddress(self,server,address):
+        self.addresses[server] = address
+
+    def getStreamAddress(self,server):
+        self.lock.acquire()
+        address = ''
+        if (server in self.addresses):
+            address = self.addresses[server]
+        self.lock.release()
+        return address
 
     @abc.abstractmethod
     def applyConfig(self,cfg):

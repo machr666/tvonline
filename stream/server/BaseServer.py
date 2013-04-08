@@ -19,8 +19,6 @@ class BaseServer(Server):
                  tvOnlineSecret,maxUpload):
         super(BaseServer,self).__init__(name,address,maxStreams,uplink,
                                        tvOnlinePort,tvOnlineSecret,maxUpload)
-        self._server = xmlrpclib.Server('https://'+self.address+":"+
-                                        str(self.tvOnlinePort))
 
         # Let's create background process that regularly checks if
         # the server status
@@ -30,7 +28,8 @@ class BaseServer(Server):
         self.__t.start()
 
     @property
-    def server(self): return self._server
+    def server(self): return xmlrpclib.Server('https://'+self.address+":"+
+                                              str(self.tvOnlinePort))
     @property
     def lock(self): return self._lock
 
@@ -95,11 +94,21 @@ class BaseServer(Server):
         t.start()
 
     def getActiveStreams(self):
-        return []
+        retVal = {}
+        #try:
+        retVal = self.server.activeStreams(self.tvOnlineSecret)
+        #except:
+        #    print("Failed to retrieve list of activeStreams")
+        return retVal
 
     def __startStream(self,cfg):
         print("Starting stream with args "+str(cfg))
-        self.server.startStream(cfg)
+        retVal = False
+        try:
+            retVal = self.server.startStream(self.tvOnlineSecret,cfg)
+        except:
+            print("Failed to start stream")
+        return retVal
 
     def startStream(self,cfg):
         t = threading.Thread(target=self.__startStream,args=(cfg,))
@@ -108,7 +117,12 @@ class BaseServer(Server):
 
     def __stopStream(self,cfg):
         print("Stopping stream with args "+str(cfg))
-        self.server.stopStream(cfg)
+        retVal = False
+        try:
+            retVal = self.server.stopStream(self.tvOnlineSecret,cfg)
+        except:
+            print("Failed to stop stream")
+        return retVal
 
     def stopStream(self,cfg):
         t = threading.Thread(target=self.__stopStream,args=(cfg,))

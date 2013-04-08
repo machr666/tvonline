@@ -39,7 +39,8 @@ class StreamManager(object):
         """ Since different servers host different streams we
             should request the status of all streams from each
             server once and subsequently update the stream 
-            objects """
+            objects. The server returns a dict with a all active
+            streams and their address."""
         while(True):
             for server,streams in self._streamsByServer.items():
                 activeStreams = server.getActiveStreams()
@@ -47,8 +48,9 @@ class StreamManager(object):
                 for stream in streams:
                     stream.lock.acquire()
                     stream.setStreamState(server,Stream.STATE.DOWN)
-                    if (stream in activeStreams):
+                    if (stream.name in activeStreams):
                         stream.setStreamState(server,Stream.STATE.UP)
+                        stream.setStreamAddress(server,activeStreams[stream.name])
                     stream.lock.release()
             time.sleep(StreamManager.SECS_BETWEEN_STATUS_CHECKS)
 
