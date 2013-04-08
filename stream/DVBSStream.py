@@ -11,6 +11,7 @@ class DVBSStream(Stream):
 
     def __init__(self,name,servers,cfgCur,cfgOpts,cfgFile,
                  channels,categories):
+        super(DVBSStream,self).__init__(name,servers,cfgCur,cfgOpts,cfgFile)
         self._channels = []
         self._catChannels = dict()
         for cat in categories:
@@ -22,7 +23,7 @@ class DVBSStream(Stream):
             self._catChannels[cat['name']] = l
 
         # Store current config in object
-        super(DVBSStream,self).__init__(name,servers,cfgCur,cfgOpts,cfgFile)
+        self.applyConfig(cfgCur)
 
     def __str__(self):
         retVal = super(DVBSStream,self).__str__()
@@ -42,11 +43,18 @@ class DVBSStream(Stream):
     def catChannels(self): return self._catChannels
 
     def applyConfig(self,cfg):
-        super(DVBSStream,self).applyConfig(cfg)
+        self.lock.acquire()
         if (cfg[DVBSStream.STREAM_CFG_CUR[0]][0] in self.channels):
             self.curChannel = cfg[DVBSStream.STREAM_CFG_CUR[0]][0]
+        self.lock.release()
+
+        # Update remaining attributes and notify stream servers of changes
+        # if necessary
+        super(DVBSStream,self).applyConfig(cfg)
 
     def getCfg(self):
         cfg = super(DVBSStream,self).getCfg()
+        self.lock.acquire()
         cfg[DVBSStream.STREAM_CFG_CUR[0]] = self.curChannel
+        self.lock.release()
         return cfg

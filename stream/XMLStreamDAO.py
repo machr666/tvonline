@@ -91,6 +91,8 @@ class XMLStreamDAO(StreamDAO):
             by the query with value query must have the
             form path:attr'''
         qsplit = query.split(':')
+        if (not len(qsplit) == 2):
+            return
         for path in root.findall(qsplit[0]):
             path.set(qsplit[1],value)
 
@@ -100,7 +102,6 @@ class XMLStreamDAO(StreamDAO):
         xmlCfgRoot = xmlCfgTree.getroot()
 
         for k,v in stream.getCfg().items():
-            print(k,v)
             self.__setFromQuery(xmlCfgRoot,k,v)
 
         xmlCfgTree.write(self.folder+stream.cfgFile)

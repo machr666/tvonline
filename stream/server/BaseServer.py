@@ -97,8 +97,20 @@ class BaseServer(Server):
     def getActiveStreams(self):
         return []
 
-    def startStream(self,**kwargs):
-        pass
+    def __startStream(self,cfg):
+        print("Starting stream with args "+str(cfg))
+        self.server.startStream(cfg)
 
-    def stopStream(self,**kwargs):
-        pass
+    def startStream(self,cfg):
+        t = threading.Thread(target=self.__startStream,args=(cfg,))
+        t.daemon = True
+        t.start()
+
+    def __stopStream(self,cfg):
+        print("Stopping stream with args "+str(cfg))
+        self.server.stopStream(cfg)
+
+    def stopStream(self,cfg):
+        t = threading.Thread(target=self.__stopStream,args=(cfg,))
+        t.daemon = True
+        t.start()

@@ -140,7 +140,6 @@ class StreamHandler(PersonalisedRequestHandler):
 
     @requireAuth(["admin"])
     def post(self):
-        print(self.request.arguments) 
         streamMgr.configureStream(self.get_argument(streamMgr.STREAM),
                                   self.request.arguments)
         self.render("../stream.html", streams=streamMgr.streams)

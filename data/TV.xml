@@ -6,7 +6,7 @@
     <audioCodec>WAV</audioCodec>
     <audioCodec>OGG</audioCodec>
   </audioCodecs>
-  <audioRates cur="128">
+  <audioRates cur="196">
     <audioRate>56</audioRate>
     <audioRate>96</audioRate>
     <audioRate>128</audioRate>

@@ -39,7 +39,7 @@ on the nature of the stream.</p>
             {% set onBtnState = '' %}
             {% if stream.getStreamState(server) == stream.STATE.UP %}
                 {% set offBtnState = '' %}
-                {% set offBtnState = 'checked' %}
+                {% set onBtnState = 'checked' %}
             {% end %}
             <tr>
                 <td></td>
@@ -47,7 +47,7 @@ on the nature of the stream.</p>
                 <td><p>{{ server.name }}</p></td>
                 <td>
                     <div class="offState" width=75px">
-                        <input type="radio" name="{{ server.name }}:state"
+                        <input type="radio" name="{{ server.name }}"
                             id="{{ stream.name }}{{ server.name }}down"
                             value="{{ stream.STATE.DOWN }}"
                             {{ offBtnState }}>
@@ -55,7 +55,7 @@ on the nature of the stream.</p>
                             style="width: 75px;">Off</label>
                     </div>
                     <div class="onState" width=75px">
-                        <input type="radio" name="{{ server.name }}:state"
+                        <input type="radio" name="{{ server.name }}"
                             id="{{ stream.name }}{{ server.name }}up"
                             value="{{ stream.STATE.UP }}"
                             {{ onBtnState }}>

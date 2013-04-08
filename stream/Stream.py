@@ -36,9 +36,6 @@ class Stream(object):
         self._streamEncryptions = cfgOpts[5]
         self._cfgFile = cfgFile
 
-        # Store current configuration
-        self.applyConfig(cfgCur)
-
         # Other
         self._state = {server : Stream.STATE.DOWN for server in servers}
         self._lock = threading.Lock()
@@ -123,17 +120,17 @@ class Stream(object):
     def lock(self): return self._lock
 
     def setStreamState(self,server,state):
-        if (server in self.state):
-            self.state[server] = state
+        self.state[server] = state
 
     def getStreamState(self,server):
-        if (server in self.state):
-            return self.state[server]
-        return self.STATE.DOWN
+        if (not server in self.state):
+            self.state[server] = Stream.STATE.DOWN
+        return self.state[server]
 
     @abc.abstractmethod
     def applyConfig(self,cfg):
         # The generic stream configuration
+        self.lock.acquire()
         if (cfg[Stream.STREAM_CFG_CUR[0]][0] in self.audioCodecs):
             self._curAudioCodec = cfg[Stream.STREAM_CFG_CUR[0]][0]
         if (cfg[Stream.STREAM_CFG_CUR[1]][0] in self.audioRates):
@@ -146,12 +143,32 @@ class Stream(object):
             self._curVideoSize = cfg[Stream.STREAM_CFG_CUR[4]][0]
         if (cfg[Stream.STREAM_CFG_CUR[5]][0] in self.streamEncryptions):
             self._curStreamEncryption = cfg[Stream.STREAM_CFG_CUR[5]][0]
+        self.lock.release()
+
+        # Apply stream state
+        streamCfg = self.getCfg()
+        for server in self.servers:
+            if server.name in cfg:
+                state = cfg[server.name][0]
+                self.lock.acquire()
+                if (not self.getStreamState(server) == state):
+                    self.setStreamState(server,state)
+                    if (state == Stream.STATE.UP):
+                        server.startStream(streamCfg)
+                    else:
+                        server.stopStream(streamCfg)
+                self.lock.release()
 
     @abc.abstractmethod
     def getCfg(self):
-        return { Stream.STREAM_CFG_CUR[0] : self.curAudioCodec,
+        self.lock.acquire()
+        cfg = { Stream.STREAM_NAME : self.name,
+                 Stream.STREAM_CLASS : self.type,
+                 Stream.STREAM_CFG_CUR[0] : self.curAudioCodec,
                  Stream.STREAM_CFG_CUR[1] : self.curAudioRate,
                  Stream.STREAM_CFG_CUR[2] : self.curVideoCodec,
                  Stream.STREAM_CFG_CUR[3] : self.curVideoRate,
                  Stream.STREAM_CFG_CUR[4] : self.curVideoSize,
                  Stream.STREAM_CFG_CUR[5] : self.curStreamEncryption }
+        self.lock.release()
+        return cfg

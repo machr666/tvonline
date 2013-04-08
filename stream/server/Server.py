@@ -115,11 +115,11 @@ class Server(object):
 
     # Start a new stream
     @abc.abstractmethod
-    def startStream(self,**kwargs):
+    def startStream(self,cfg):
         pass
 
     # Stop a stream
     @abc.abstractmethod
-    def stopStream(self,**kwargs):
+    def stopStream(self,cfg):
         pass
 

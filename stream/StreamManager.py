@@ -50,8 +50,7 @@ class StreamManager(object):
                     if (stream in activeStreams):
                         stream.setStreamState(server,Stream.STATE.UP)
                     stream.lock.release()
-
-        time.sleep(StreamManager.SECS_BETWEEN_STATUS_CHECKS)
+            time.sleep(StreamManager.SECS_BETWEEN_STATUS_CHECKS)
 
     def getStream(self,name):
         """ Get stream object by name """

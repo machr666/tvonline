@@ -67,12 +67,14 @@ def activeStreams():
 
 # Start a new Stream
 @serviceFct
-def startStream(**kwargs):
+def startStream(cfg):
     # TODO: Stub
+    print cfg
     return True
 
 # Stop a Stream
 @serviceFct
-def stopStream(**kwargs):
+def stopStream(cfg):
     # TODO: Stub
+    print cfg
     return True
