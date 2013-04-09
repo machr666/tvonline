@@ -164,7 +164,7 @@ on the nature of the stream.</p>
                                 {% set selected='selected' %}
                             {% end %}
                             <option value="{{ channel }}" {{ selected }}>
-                                {{ channel }}
+                            {{ stream.channelName(channel) }}
                             </option>
                         {% end %}
                         </optgroup>

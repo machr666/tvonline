@@ -23,10 +23,11 @@ class Stream(object):
                        'videoSizes/videoSize',
                        'streamEncryptions/streamEncryption']
 
-    STATE = enum(UP='Up', DOWN='Down')
+    STATE = enum(UP='Up', DOWN='Down', BUSY='Busy')
 
     def __init__(self,name,servers,cfgCur,cfgOpts,cfgFile):
         self._name = name
+        self._displayName = name
         self._servers = servers
         self._audioCodecs = cfgOpts[0]
         self._audioRates = cfgOpts[1]
@@ -68,6 +69,10 @@ class Stream(object):
     @property
     def name(self): return self._name
     @property
+    def displayName(self): return self._displayName
+    @displayName.setter
+    def displayName(self,value): self._displayName = value
+    @property
     def servers(self): return self._servers
 
     # Config
@@ -81,7 +86,7 @@ class Stream(object):
     @property
     def curAudioRate(self): return self._curAudioRate
     @curAudioRate.setter
-    def curAudioRate(self, value): self_curAudioRate = value
+    def curAudioRate(self, value): self_curAudioRate = int(value)
     @property
     def audioRates(self): return self._audioRates
 
@@ -95,14 +100,14 @@ class Stream(object):
     @property
     def curVideoRate(self): return self._curVideoRate
     @curVideoRate.setter
-    def curVideoRate(self, value): self_curVideoRate = value
+    def curVideoRate(self, value): self_curVideoRate = int(value)
     @property
     def videoRates(self): return self._videoRates
 
     @property
     def curVideoSize(self): return self._curVideoSize
     @curVideoSize.setter
-    def curVideoSize(self, value): self_curVideoSize = value
+    def curVideoSize(self, value): self_curVideoSize = int(value)
     @property
     def videoSizes(self): return self._videoSizes
 
@@ -113,6 +118,9 @@ class Stream(object):
     @property
     def streamEncryptions(self): return self._streamEncryptions
 
+    @property
+    def dataRate(self): return (int(self.curVideoRate) +\
+                                int(self.curAudioRate) )*110/100
     @property
     def addresses(self): return self._addresses
 

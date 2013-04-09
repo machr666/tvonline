@@ -10,28 +10,28 @@
     <p>Let's watch some TV!</p>
     <embed type="application/x-vlc-plugin" name="player" 
             autoplay="yes" loop="no"
-            target="{{ stream.address }}" 
+            target="{{ curStreamAddress }}" 
             width="480" height="360"/>
 </div>
 <form style="float: right; padding-right: 25px;"
                     action="tv" method="post">
-    <p>Programs</p>
     {% module xsrf_form_html() %}
-    <input type="submit" value="Change program"><br><br>
-    <div style="overflow-y:scroll; overflow-x: hidden; height:320px;
+    <input type="submit" value="Choose stream"><br><br>
+    <div style="overflow-y: hidden; overflow-x: hidden; height:320px;
                 width: 200px; margin-left: -2px">
         <table>
-        {% for program in stream.programList %}
+        {% for stream in streams %}
             <tr><td>
-                <div class="programlist">
-                    {% if program.pid == stream.curPid %}
-                        <input type="radio" id="{{ program.abbr }}"
-                        name="programs" value="{{ program.pid }}" checked>
+                <div class="radiolist">
+                    {% if stream.name == curStream %}
+                        <input type="radio" id="{{ stream.name }}"
+                        name="stream" value="{{ stream.name }}" checked>
                     {% else %}
-                        <input type="radio" id="{{ program.abbr }}"
-                        name="programs" value="{{ program.pid }}">
+                        <input type="radio" id="{{ stream.name }}"
+                        name="stream" value="{{ stream.name }}">
                     {% end %}
-                    <label for="{{ program.abbr }}">{{ program.name }}</label>
+                    <label for="{{ stream.name }}"
+                        style="width: 200px;">{{ stream.displayName }}</label>
                 </div>
             </td></tr>
         {% end %}

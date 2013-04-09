@@ -32,8 +32,17 @@ class StreamManager(object):
     def streamDAO(self): return self._streamDAO
     @property
     def streams(self):
-        """ Get up-to-date information about all streams """
         return self._streams.values()
+    @property
+    def activeStreams(self):
+        """ Get list of all streams that are currently being served"""
+        s = {}
+        for server,streams in self._streamsByServer.items():
+            if (server.STATE == server.STATE.UP):
+                for stream in streams:
+                    s[stream.name] = ''
+        return s.values()
+        
 
     def __updateStreamStatus(self):
         """ Since different servers host different streams we
@@ -56,7 +65,7 @@ class StreamManager(object):
 
     def getStream(self,name):
         """ Get stream object by name """
-        if name in self._streams:
+        if (name in self._streams):
             return self._streams[name]
         return None
 
@@ -70,15 +79,13 @@ class StreamManager(object):
 
         # Save config
         self.streamDAO.persist(stream)
-"""
 
-    def getServerUploadCapacity(self,name,update=False):
-        "" Check the remaining upload capacity of a given server ""
-        server = self.getServer(name)
-        if server == None:
-            return 0
-        ttlUplinkUpload = 0
-        for uplink in self.__serversByUplink:
-            if (uplink == server.uplink):
-                ttlUplinkUpload += server.curUpload
-        return server.uploadMax - ttlUplinkUpload"""
+    def requestStream(self,name):
+        """ Check if the requested stream can be provided by any server """
+        stream = self.getStream(name)
+        if (stream == None):
+            return Stream.STATE.DOWN
+        for server in stream.servers:
+            if (server.curUpload + stream.dataRate < server.maxUpload):
+                return stream.getAddress(server)
+        return Stream.STATE.BUSY

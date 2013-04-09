@@ -15,6 +15,7 @@ from stream.server.ServerManager import ServerManager
 serverMgr = ServerManager(XMLServerDAO('data'))
 
 # Stream configuration
+from stream.Stream import Stream
 from stream.XMLStreamDAO import XMLStreamDAO
 from stream.StreamManager import StreamManager
 streamMgr = StreamManager(XMLStreamDAO(serverMgr,'data'))
@@ -106,11 +107,25 @@ class TVHandler(PersonalisedRequestHandler):
 
     @requireAuth()
     def get(self):
-        self.render("../tv.html", stream=streamCtrl)
+        self.render("../tv.html", 
+                    streams=streamMgr.activeStreams,
+                    curStream='',
+                    curStreamAddress='/static/images/chooseStream.jpg') 
 
     @requireAuth()
     def post(self):
-        self.render("../tv.html", stream=streamCtrl)
+        stream = self.get_argument(streamMgr.STREAM,'')
+        addr = streamMgr.requestStream(stream)
+
+        if (addr == Stream.STATE.BUSY):
+            addr = '/static/images/busyStream.jpg'
+        elif (addr == Stream.STATE.DOWN):
+            addr = '/static/images/chooseStream.jpg'
+
+        self.render("../tv.html", 
+                    streams=streamMgr.activeStreams,
+                    curStream=stream,
+                    curStreamAddress=addr) 
 
 class ServerManagerHandler(PersonalisedRequestHandler):
     ''' Handle get/post requests for the server configuration page '''

@@ -12,14 +12,14 @@ class DVBSStream(Stream):
     def __init__(self,name,servers,cfgCur,cfgOpts,cfgFile,
                  channels,categories):
         super(DVBSStream,self).__init__(name,servers,cfgCur,cfgOpts,cfgFile)
-        self._channels = []
-        self._catChannels = dict()
+        self._channels = {}
+        self._catChannels = {}
         for cat in categories:
             l = []
             for chan in channels:
                 if (chan['cat'] == cat['id']):
-                        l.append(chan['name'])
-                        self._channels.append(chan['name'])
+                        l.append(chan['id'])
+                        self._channels[chan['id']] = [chan['name']]
             self._catChannels[cat['name']] = l
 
         # Store current config in object
@@ -34,6 +34,9 @@ class DVBSStream(Stream):
         return retVal
 
     @property
+    def displayName(self): return self.name + ": " +\
+                                self.channelName(self.curChannel)
+    @property
     def curChannel(self): return self._curChannel
     @curChannel.setter
     def curChannel(self,value): self._curChannel = value
@@ -41,6 +44,8 @@ class DVBSStream(Stream):
     def channels(self): return self._channels
     @property
     def catChannels(self): return self._catChannels
+
+    def channelName(self,channel): return self.channels[channel][0]
 
     def applyConfig(self,cfg):
         self.lock.acquire()
