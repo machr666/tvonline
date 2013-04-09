@@ -4,6 +4,7 @@
     <streamClass>stream.DVBSStream.DVBSStream</streamClass>
     <servers>
       <server>server1</server>
+      <server>server2</server>
     </servers>
     <streamConfig>TV.xml</streamConfig>
   </stream>

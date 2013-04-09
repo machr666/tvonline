@@ -44,7 +44,7 @@ class LinuxCommands(object):
                      str(audioRate)+",channels=2,samplerate=44100,hq"
         vlcParams += ",vcodec="+str(videoCodec)+",vb="+str(videoRate)+\
                      ",fps=25,scale=0."+str(videoSize)+"}" 
-        vlcParams += "std{access,"+str(protocol)+",mux,tex,dst=0.0.0.0:"+\
+        vlcParams += ":std{access="+str(protocol)+",mux=ts,dst=0.0.0.0:"+\
                      str(port)+"}' -v"
 
         p = SysProcess()

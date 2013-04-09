@@ -113,9 +113,8 @@ class TVHandler(PersonalisedRequestHandler):
 
     @requireAuth()
     def post(self):
-        stream = self.get_argument(streamMgr.STREAM,'')
-        addr = streamMgr.requestStream(stream)
-
+        streamName = self.get_argument(streamMgr.STREAM,'')
+        addr = streamMgr.requestStream(streamName)
         if (addr == Stream.STATE.BUSY):
             addr = '/static/images/busyStream.jpg'
         elif (addr == Stream.STATE.DOWN):
@@ -123,7 +122,7 @@ class TVHandler(PersonalisedRequestHandler):
 
         self.render("../tv.html", 
                     streams=streamMgr.activeStreams,
-                    curStream=stream,
+                    curStream=streamName,
                     curStreamAddress=addr) 
 
 class ServerManagerHandler(PersonalisedRequestHandler):

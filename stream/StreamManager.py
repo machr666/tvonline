@@ -38,10 +38,11 @@ class StreamManager(object):
         """ Get list of all streams that are currently being served"""
         s = {}
         for server,streams in self._streamsByServer.items():
-            if (server.STATE == server.STATE.UP):
+            if (server.state == server.STATE.UP):
                 for stream in streams:
-                    s[stream.name] = ''
-        return s.values()
+                    if (stream.getStreamState(server) == stream.STATE.UP):
+                        s[stream] = ''
+        return s.keys()
 
     def __updateStreamStatus(self):
         """ Since different servers host different streams we
@@ -84,7 +85,11 @@ class StreamManager(object):
         stream = self.getStream(name)
         if (stream == None):
             return Stream.STATE.DOWN
+        streamState = Stream.STATE.DOWN
         for server in stream.servers:
-            if (server.curUpload + stream.dataRate < server.maxUpload):
-                return stream.getAddress(server)
-        return Stream.STATE.BUSY
+            address = stream.getStreamAddress(server)
+            if (not address == ''):
+                streamState = Stream.STATE.BUSY
+                if (server.curUpload + stream.dataRate < server.maxUpload):
+                    return address
+        return streamState

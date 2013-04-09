@@ -19,7 +19,7 @@ class XMLUserMgmtDAO(UserMgmtDAO):
             self.__groupDB[name] = []
 
             for group in user.findall('groups/group'):
-                self.__groupDB[name].append(group.get(name))
+                self.__groupDB[name].append(group.get('name'))
 
     def getUserPwd(self,username):
         if (username in self.__userDB):
