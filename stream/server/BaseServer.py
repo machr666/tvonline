@@ -62,19 +62,19 @@ class BaseServer(Server):
             time.sleep(BaseServer.SECS_BETWEEN_STATE_CHECKS)
 
     def __getCurUploadRate(self):
-        uploadRate = 0
+        resp = [False,0]
         try:
-            uploadRate = self.server.curUploadRate(self.tvOnlineSecret)
+            # Returns [True,rate]
+            resp = self.server.curUploadRate(self.tvOnlineSecret)
+            if (resp[0]):
+                uploadRate = resp[1]
         except:
-            uploadRate = -1
+            uploadRate = 0
         self.lock.acquire()
-        if (uploadRate == -1):
-            self.curUpload = 0
-        else:
-            self.curUpload = uploadRate/1024
+        self.curUpload = uploadRate/1024
         self.lock.release()
 
-        return uploadRate >= 0
+        return resp[0]
 
     def startServer(self):
         pass
@@ -82,9 +82,12 @@ class BaseServer(Server):
     def __shutdown(self):
         retVal = False
         try:
-            retVal = self.server.shutdown(self.tvOnlineSecret)
-        except:
-            print("Cannot shutdown server")
+            resp = self.server.shutdown(self.tvOnlineSecret)
+            retVal = resp[0]
+            if (not retVal):
+                print(resp[1])
+        except Exception, e:
+            print(e)
         return retVal
 
     def stopServer(self):
@@ -95,19 +98,27 @@ class BaseServer(Server):
 
     def getActiveStreams(self):
         retVal = {}
-        #try:
-        retVal = self.server.activeStreams(self.tvOnlineSecret)
-        #except:
-        #    print("Failed to retrieve list of activeStreams")
+        try:
+            # Response is [T/F,{name : address,...}]
+            resp = self.server.activeStreams(self.tvOnlineSecret)
+            if (resp[0]):
+                retVal = resp[1]
+            else:
+                print (resp[1])
+        except Exception, e:
+            print(e)
         return retVal
 
     def __startStream(self,cfg):
         print("Starting stream with args "+str(cfg))
         retVal = False
         try:
-            retVal = self.server.startStream(self.tvOnlineSecret,cfg)
-        except:
-            print("Failed to start stream")
+            resp = self.server.startStream(self.tvOnlineSecret,cfg)
+            retVal = resp[0]
+            if (not retVal):
+                print (resp[1])
+        except Exception, e:
+            print(e)
         return retVal
 
     def startStream(self,cfg):
@@ -119,9 +130,12 @@ class BaseServer(Server):
         print("Stopping stream with args "+str(cfg))
         retVal = False
         try:
-            retVal = self.server.stopStream(self.tvOnlineSecret,cfg)
-        except:
-            print("Failed to stop stream")
+            resp = self.server.stopStream(self.tvOnlineSecret,cfg)
+            retVal = resp[0]
+            if (not retVal):
+                print (resp[1])
+        except Exception, e:
+            print(e)
         return retVal
 
     def stopStream(self,cfg):
