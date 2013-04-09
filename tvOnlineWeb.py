@@ -6,8 +6,8 @@ import tornado.options
 import tornado.ioloop
 
 # User authentication and rights management
-from usermgmt.MockUserMgmtDAO import MockUserMgmtDAO
-userDAO = MockUserMgmtDAO()
+from usermgmt.XMLUserMgmtDAO import XMLUserMgmtDAO
+userDAO = XMLUserMgmtDAO('data')
 
 # Server configuration
 from stream.server.XMLServerDAO import XMLServerDAO

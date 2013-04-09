@@ -20,7 +20,7 @@ class UserMgmtDAO(object):
     @staticmethod
     def hashPwd(password):
         """ Our standard way of hashing passwords """
-        return md5.new(password).digest()
+        return md5.new(password).hexdigest()
 
     def isLoginValid(self,username,password):
         """ Encrypt the password and check whether it is matching our db """
