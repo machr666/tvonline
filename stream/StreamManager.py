@@ -42,7 +42,6 @@ class StreamManager(object):
                 for stream in streams:
                     s[stream.name] = ''
         return s.values()
-        
 
     def __updateStreamStatus(self):
         """ Since different servers host different streams we

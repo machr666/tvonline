@@ -21,7 +21,6 @@ from stream.StreamManager import StreamManager
 streamMgr = StreamManager(XMLStreamDAO(serverMgr,'data'))
 
 from tornado.options import define, options
-define("port", default=8080, help="Server port", type=int)
 
 class TVServer(tornado.web.Application):
     ''' Configure server '''
@@ -41,7 +40,7 @@ class TVServer(tornado.web.Application):
             cookie_secret = "bls9+x7PT5GIbaBuKzsGOecL9SG7KUmEh6rNbMYTpfk=",
             login_url = "/login",
             template_path = os.path.join(mainDir, "templates/myStyle"),
-            static_path = os.path.join(mainDir, "templates/myStyle/static"),
+            static_path = os.path.join(mainDir, "templates/myStyle/static")
         )
         tornado.web.Application.__init__(self, handlers, **settings)
 
@@ -172,8 +171,13 @@ class ReqHandler(PersonalisedRequestHandler):
 #---------------------------------------------------------------
 #               Launch the server
 #---------------------------------------------------------------
+define("port", default=8001, help="Server port", type=int)
+mainDir = os.path.dirname(__file__)
+
 if __name__ == "__main__":
     tornado.options.parse_command_line()
-    http_server = tornado.httpserver.HTTPServer(TVServer())
+    http_server = tornado.httpserver.HTTPServer(TVServer(),
+        ssl_options = {"certfile": os.path.join(mainDir, "certs/tvonline.crt"),
+                      "keyfile": os.path.join(mainDir, "certs/tvonline.key")})
     http_server.listen(options.port)
     tornado.ioloop.IOLoop.instance().start()
