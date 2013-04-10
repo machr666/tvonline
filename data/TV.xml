@@ -3,7 +3,7 @@
     <audioCodec>None</audioCodec>
     <audioCodec>mpga</audioCodec>
   </audioCodecs>
-  <audioRates cur="56">
+  <audioRates cur="64">
     <audioRate>64</audioRate>
     <audioRate>96</audioRate>
     <audioRate>128</audioRate>
