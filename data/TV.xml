@@ -1,27 +1,21 @@
 <config>
-  <audioCodecs cur="MP3">
+  <audioCodecs cur="mpga">
     <audioCodec>None</audioCodec>
-    <audioCodec>MP2</audioCodec>
-    <audioCodec>MP3</audioCodec>
-    <audioCodec>WAV</audioCodec>
-    <audioCodec>OGG</audioCodec>
+    <audioCodec>mpga</audioCodec>
   </audioCodecs>
-  <audioRates cur="196">
-    <audioRate>56</audioRate>
+  <audioRates cur="56">
+    <audioRate>64</audioRate>
     <audioRate>96</audioRate>
     <audioRate>128</audioRate>
     <audioRate>196</audioRate>
     <audioRate>256</audioRate>
     <audioRate>312</audioRate>
   </audioRates>
-  <videoCodecs cur="MPEG-II">
+  <videoCodecs cur="h264">
     <videoCodec>None</videoCodec>
-    <videoCodec>MPEG-II</videoCodec>
-    <videoCodec>MP4</videoCodec>
-    <videoCodec>DivX</videoCodec>
-    <videoCodec>XVid</videoCodec>
+    <videoCodec>h264</videoCodec>
   </videoCodecs>
-  <videoRates cur="1024">
+  <videoRates cur="512">
     <videoRate>512</videoRate>
     <videoRate>640</videoRate>
     <videoRate>768</videoRate>
@@ -41,7 +35,7 @@
     <streamEncryption>None</streamEncryption>
     <streamEncryption>AES</streamEncryption>
   </streamEncryptions>
-  <channels cur="ARD">
+  <channels cur="ZDF">
     <channel cat="GER" id="ARD" name="ARD" />
     <channel cat="GER" id="ZDF" name="ZDF" />
     <channel cat="GER" id="WDR" name="WDR" />
