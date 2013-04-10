@@ -1,0 +1,25 @@
+#!/bin/sh
+# /etc/init.d/tvonline
+
+cd /home/pi/tvonline
+case "$1" in
+  start)
+    echo "Starting tvOnline"
+    nohup python tvOnlineWeb.py > log.txt 2>&1 &
+    PID=$!
+    GPID=`ps x -o "%p %r" | grep ${PID} | sed -e 's/^ \w*\ *//'`
+    echo ${GPID} > gpid.txt
+    ;;
+  stop)
+    echo "Stopping tvOnline"
+    GPID=`cat gpid.txt`
+    kill -9 -${GPID}
+    ;;
+  *)
+    echo "Usage: /etc/init.d/tvonline {start|stop}"
+    exit 1
+    ;;
+esac
+
+exit 0
+
