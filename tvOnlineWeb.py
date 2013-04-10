@@ -1,5 +1,5 @@
 import os.path
-
+import socket
 import tornado.web
 import tornado.httpserver
 import tornado.options
@@ -178,5 +178,7 @@ if __name__ == "__main__":
     http_server = tornado.httpserver.HTTPServer(TVServer(),
         ssl_options = {"certfile": os.path.join(mainDir, "certs/tvonline.crt"),
                       "keyfile": os.path.join(mainDir, "certs/tvonline.key")})
-    http_server.listen(options.port)
+    #http_server.listen(options.port)
+    http_server.bind(options.port,family=socket.AF_INET)
+    http_server.start(0)
     tornado.ioloop.IOLoop.instance().start()
