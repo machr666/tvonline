@@ -14,8 +14,8 @@ class SysProcess(object):
         if (self.p != None):
             print('Cannot make multiple calls from SysProcess object')
             return False
-
-        self.p = subprocess.Popen(cmd, shell=True,
+        print('Starting '+str(cmd))
+        self.p = subprocess.Popen(cmd, shell=False,
                                   preexec_fn=os.setsid,
                                   stdout=subprocess.PIPE,
                                   stderr=subprocess.STDOUT)

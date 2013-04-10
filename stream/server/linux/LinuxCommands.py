@@ -7,7 +7,7 @@ class LinuxCommands(object):
 
     def shutdown(self):
         p = SysProcess()
-        return p.execute('shutdown -h 1')
+        return p.execute(['shutdown','-h','1'])
 
     def getTtlUploadRate(self,devices):
         curTtlUploadBits = 0
@@ -34,19 +34,19 @@ class LinuxCommands(object):
         port = '0'
         protocol = ''
         if (streamClass == 'DVBSStream'):
-                print("Start DVB-s stream")
+                print('Start DVB-s stream')
                 channel = cfg[DVBSStream.STREAM_CFG_CUR[0]]
                 vlcParams += 'dvb-s://'+str(channels[channel])
                 port = 4000
                 protocol = 'http'
 
-        vlcParams += " --sout '#transcode{acodec="+str(audioCodec)+",ab="+\
-                     str(audioRate)+",channels=2,samplerate=44100,hq"
-        vlcParams += ",vcodec="+str(videoCodec)+",vb="+str(videoRate)+\
-                     ",fps=25,scale=0."+str(videoSize)+"}" 
-        vlcParams += ":std{access="+str(protocol)+",mux=ts,dst=0.0.0.0:"+\
-                     str(port)+"}' -v"
+        vlcParams += ' --sout=#transcode{acodec='+str(audioCodec)+',ab='+\
+                     str(audioRate)+',channels=2,samplerate=44100,hq'
+        vlcParams += ',vcodec='+str(videoCodec)+',vb='+str(videoRate)+\
+                     ',fps=25,scale=0.'+str(videoSize)+'}' 
+        vlcParams += ':std{access='+str(protocol)+',mux=ts,dst=0.0.0.0:'+\
+                     str(port)+'} -v'
 
         p = SysProcess()
-        p.execute("cvlc "+vlcParams)
+        p.execute(str("cvlc "+vlcParams).split())
         return(name,p,protocol,port)
