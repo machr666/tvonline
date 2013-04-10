@@ -183,5 +183,6 @@ if __name__ == "__main__":
                       "keyfile": os.path.join(mainDir, "certs/tvonline.key")})
     #http_server.listen(options.port)
     http_server.bind(options.port,family=socket.AF_INET)
-    http_server.start(0)
+    http_server.start(1) # TODO: Currently start(0) doesn't work because of
+                         #       threading issues (objects aren't updated properly)
     tornado.ioloop.IOLoop.instance().start()
