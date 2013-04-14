@@ -9,9 +9,13 @@
 <div id="tv" style="float: left">
     <p>Let's watch some TV!</p>
     <embed type="application/x-vlc-plugin" name="player" 
-            autoplay="yes" loop="no"
-            target="{{ curStreamAddress }}" 
-            width="480" height="360"/>
+               autoplay="yes" loop="no"
+               target="{{ curStreamAddress }}" 
+               width="480" height="360"/><br>
+    {% if curStreamAddress.endswith('mp4') %}
+    	<a href="{{ curStreamAddress }}">Click here to open stream
+    	   if video doesn't show</a>
+    {% end %}
 </div>
 <form style="float: right; padding-right: 25px;"
                     action="tv" method="post">
