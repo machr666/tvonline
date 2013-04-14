@@ -5,6 +5,11 @@ from stream.DVBSStream import DVBSStream
 
 class LinuxCommands(object):
 
+    def __init__(self):
+        # Shut any vlc instances
+        pids = SysProcess.findAllPids("vlc")
+        SysProcess.killAll(pids)
+    
     def shutdown(self):
         p = SysProcess()
         return p.execute(['shutdown','-h','1'])
@@ -13,7 +18,7 @@ class LinuxCommands(object):
         curTtlUploadBits = 0
         for dev in devices:
             txBitFile = open('/sys/class/net/'+dev+'/statistics/tx_bytes','r')
-            curTtlUploadBits += int(txBitFile.read())
+            curTtlUploadBits += int(txBitFile.read())*8 # bytes to bits
             txBitFile.close()
         return curTtlUploadBits
 
@@ -45,7 +50,7 @@ class LinuxCommands(object):
         vlcParams += ',vcodec='+str(videoCodec)+',vb='+str(videoRate)+\
                      ',fps=25,scale=0.'+str(videoSize)+'}' 
         vlcParams += ':std{access='+str(protocol)+',mux=ts,dst=0.0.0.0:'+\
-                     str(port)+'} -v'
+                     str(port)+'}'
 
         p = SysProcess()
         p.execute(str("cvlc "+vlcParams).split())
