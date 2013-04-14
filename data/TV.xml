@@ -3,7 +3,8 @@
     <audioCodec>None</audioCodec>
     <audioCodec>mpga</audioCodec>
   </audioCodecs>
-  <audioRates cur="64">
+  <audioRates cur="56">
+    <audioRate>56</audioRate>
     <audioRate>64</audioRate>
     <audioRate>96</audioRate>
     <audioRate>128</audioRate>
@@ -15,7 +16,9 @@
     <videoCodec>None</videoCodec>
     <videoCodec>h264</videoCodec>
   </videoCodecs>
-  <videoRates cur="512">
+  <videoRates cur="400">
+    <videoRate>400</videoRate>
+    <videoRate>448</videoRate>
     <videoRate>512</videoRate>
     <videoRate>640</videoRate>
     <videoRate>768</videoRate>
@@ -35,18 +38,45 @@
     <streamEncryption>None</streamEncryption>
     <streamEncryption>AES</streamEncryption>
   </streamEncryptions>
-  <channels cur="ZDF">
+  <channels cur="SPORT1">
     <channel cat="GER" id="ARD" name="ARD" />
     <channel cat="GER" id="ZDF" name="ZDF" />
     <channel cat="GER" id="WDR" name="WDR" />
     <channel cat="GER" id="RTL" name="RTL" />
     <channel cat="GER" id="SAT1" name="SAT 1" />
+    <channel cat="GER" id="PRO7" name="PRO 7" />
     <channel cat="GER" id="KABEL1" name="Kabel 1" />
+    <channel cat="GER" id="VOX" name="VOX" />
     <channel cat="GER" id="SPORT1" name="Sport 1" />
     <channel cat="GER" id="EUROSPORT" name="Eurosport" />
+    <channel cat="GER" id="EINSFESTIVAL" name="1 Festival" />
+    <channel cat="GER" id="EINSPLUS" name="1 Plus" />
+    <channel cat="GER" id="ZDFNEO" name="ZDF Neo" />
+    <channel cat="GER" id="ZDFKULTUR" name="ZDF Kultur" />
+    <channel cat="GER" id="ZDFINFO" name="ZDF Info" />
+    <channel cat="GER" id="HR" name="HR" />
+    <channel cat="GER" id="BRALPHA" name="BR Alpha" />
+    <channel cat="GER" id="MDR" name="MDR" />
+    <channel cat="GER" id="NDR" name="NDR" />
+    <channel cat="GER" id="SR" name="SR" />
+    <channel cat="GER" id="SWR" name="SWR" />
+    <channel cat="GER" id="KIKA" name="KIKA" />
+    <channel cat="GER" id="ARTE" name="ARTE" />
+    <channel cat="GER" id="N24" name="N24" />
+    <channel cat="GER" id="PHOENIX" name="PHOENIX" />
+    <channel cat="GER" id="DMAX" name="DMAX" />
     <channel cat="UK" id="BBC1" name="BBC 1" />
     <channel cat="UK" id="BBC2" name="BBC 2" />
     <channel cat="UK" id="ITV1" name="ITV 1" />
+    <channel cat="UK" id="ITV1+1" name="ITV 1+1" />
+    <channel cat="UK" id="ITV2" name="ITV 2" />
+    <channel cat="UK" id="ITV2+1" name="ITV 2+1" />
+    <channel cat="UK" id="ITV3" name="ITV 3" />
+    <channel cat="UK" id="ITV3+1" name="ITV 3+1" />
+    <channel cat="UK" id="E4" name="E4" />
+    <channel cat="UK" id="E4+1" name="E4 +1" />
+    <channel cat="UK" id="MORE4" name="MORE4" />
+    <channel cat="UK" id="MORE4+1" name="MORE4 +1" />
   </channels>
   <categories>
     <category id="GER" name="German TV" />
