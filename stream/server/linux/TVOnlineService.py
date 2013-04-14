@@ -4,8 +4,8 @@ from functools import wraps
 
 from LinuxCommands import LinuxCommands as Commands
 
-SERVER_SECRET = "TVOnlineRules"
-STREAM_ADDRESS = "192.168.0.1"
+SERVER_SECRET = "MyBigFatSecret"
+STREAM_ADDRESS = "machr666.no-ip.org"
 
 def checkAuth(f):
     @wraps(f)
@@ -100,9 +100,9 @@ class TVOnlineService(object):
         if (not self.__stopOldStream(cfg)):
             return [False, 'Error: Failed to terminate current '+
                            'instance of the stream: '+str(cfg)]
-        (name, proc, protocol, port) = self.__cmds.startStream(cfg)
+        (name, proc, protocol, port, sFile) = self.__cmds.startStream(cfg)
         self.__streams[name] = (proc,str(protocol+'://'+str(STREAM_ADDRESS)+
-                                         ':'+str(port)))
+                                         ':'+str(port)+"/"+str(sFile)))
         return [True, {name : self.__streams[name][1]}]
 
     @checkAuth

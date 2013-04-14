@@ -38,20 +38,22 @@ class LinuxCommands(object):
         vlcParams = ''
         port = '0'
         protocol = ''
+        sFile = ''
         if (streamClass == 'DVBSStream'):
                 print('Start DVB-s stream')
                 channel = cfg[DVBSStream.STREAM_CFG_CUR[0]]
                 vlcParams += 'dvb-s://'+str(channels[channel])
                 port = 4000
                 protocol = 'http'
+                sFile = 'tv.mp4'
 
         vlcParams += ' --sout=#transcode{acodec='+str(audioCodec)+',ab='+\
                      str(audioRate)+',channels=2,samplerate=44100,hq'
         vlcParams += ',vcodec='+str(videoCodec)+',vb='+str(videoRate)+\
                      ',fps=25,scale=0.'+str(videoSize)+'}' 
         vlcParams += ':std{access='+str(protocol)+',mux=ts,dst=0.0.0.0:'+\
-                     str(port)+'}'
+                     str(port)+'/'+sFile+'}'
 
         p = SysProcess()
         p.execute(str("cvlc "+vlcParams).split())
-        return(name,p,protocol,port)
+        return(name,p,protocol,port,sFile)
